@@ -1,0 +1,32 @@
+2024-09-16 23:46:36.285 CST [6544] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2024-09-16 23:46:36.287 CST [6544] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2024-09-16 23:46:36.287 CST [6544] LOG:  listening on IPv6 address "::", port 5432
+2024-09-16 23:46:36.293 CST [6544] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2024-09-16 23:46:36.311 CST [6563] LOG:  database system was shut down at 2024-05-31 12:53:38 CST
+2024-09-16 23:46:36.330 CST [6544] LOG:  database system is ready to accept connections
+2024-09-16 23:47:10.617 CST [7449] ERROR:  syntax error at or near "-" at character 26
+2024-09-16 23:47:10.617 CST [7449] STATEMENT:  create database langchain-chatchat
+	;
+2024-09-16 23:51:36.381 CST [6561] LOG:  checkpoint starting: time
+2024-09-16 23:53:09.668 CST [6561] LOG:  checkpoint complete: wrote 928 buffers (5.7%); 1 WAL file(s) added, 0 removed, 0 recycled; write=93.240 s, sync=0.006 s, total=93.288 s; sync files=251, longest=0.005 s, average=0.001 s; distance=4194 kB, estimate=4194 kB
+2024-09-17 00:03:18.532 CST [48661] ERROR:  syntax error at or near "use" at character 1
+2024-09-17 00:03:18.532 CST [48661] STATEMENT:  use langchain_chatcaht
+	;
+2024-09-17 00:04:26.077 CST [50346] ERROR:  syntax error at or near "values" at character 19
+2024-09-17 00:04:26.077 CST [50346] STATEMENT:  create table test values(id int, name varchar(20));
+2024-09-17 00:06:36.885 CST [6561] LOG:  checkpoint starting: time
+2024-09-17 00:06:39.126 CST [6561] LOG:  checkpoint complete: wrote 23 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.237 s, sync=0.002 s, total=2.241 s; sync files=19, longest=0.001 s, average=0.001 s; distance=88 kB, estimate=3783 kB
+2024-09-17 00:10:05.279 CST [50346] ERROR:  missing FROM-clause entry for table "pg_database" at character 40
+2024-09-17 00:10:05.279 CST [50346] STATEMENT:  SELECT pg_catalog.pg_database_to_owner(pg_database.datname);
+2024-09-17 00:10:21.816 CST [50346] ERROR:  missing FROM-clause entry for table "langchain_chatcaht" at character 40
+2024-09-17 00:10:21.816 CST [50346] STATEMENT:  SELECT pg_catalog.pg_database_to_owner(langchain_chatcaht.datname);
+2024-09-17 00:14:18.841 CST [50346] ERROR:  syntax error at or near "Sudo" at character 1
+2024-09-17 00:14:18.841 CST [50346] STATEMENT:  Sudo netstat -plnt | grep postgresql
+	;
+2024-09-17 14:41:42.369 CST [6544] LOG:  received smart shutdown request
+2024-09-17 14:41:42.392 CST [6544] LOG:  received SIGHUP, reloading configuration files
+2024-09-17 14:41:42.429 CST [6544] LOG:  background worker "logical replication launcher" (PID 6566) exited with exit code 1
+2024-09-17 14:41:42.438 CST [6561] LOG:  shutting down
+2024-09-17 14:41:42.447 CST [6561] LOG:  checkpoint starting: shutdown immediate
+2024-09-17 14:41:42.679 CST [6561] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.033 s, sync=0.001 s, total=0.242 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=3405 kB
+2024-09-17 14:41:42.702 CST [6544] LOG:  database system is shut down
