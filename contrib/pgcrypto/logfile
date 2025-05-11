@@ -1,0 +1,248 @@
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  postgres: PostmasterMain: initial environment dump:
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  -----------------------------------------
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LDFLAGS=-L/usr/local/openssl - 3.4.0/lib64
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	XDG_SESSION_ID=25
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	HOSTNAME=localhost.localdomain
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	TERM=xterm
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	SHELL=/bin/bash
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	HISTSIZE=1000
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PERL5LIB=/home/postgresql/perl5/lib/perl5:
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PG_GRANDPARENT_PID=123542
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	QTDIR=/usr/lib64/qt-3.3
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PERL_MB_OPT=--install_base /home/postgresql/perl5
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	QTINC=/usr/lib64/qt-3.3/include
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	ANT_HOME=/usr/share/ant/bin
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	QT_GRAPHICSSYSTEM_CHECKED=1
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	USER=postgresql
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PGPORT=5432
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LD_LIBRARY_PATH=/home/postgresql/pg15/opt/pgsql/lib:
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PATH=/usr/share/ant/bin/bin:/usr/share/ant/bin/bin:/home/postgresql/pg15/opt/pgsql/bin:/usr/lib64/qt-3.3/bin:/home/postgresql/perl5/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/postgresql/.local/bin:/home/postgresql/bin
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	MAIL=/var/spool/mail/postgresql
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	_=/home/postgresql/pg15/opt/pgsql/bin/pg_ctl
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PWD=/home/postgresql/pg15/postgresql-15.3/contrib/pgcrypto
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LANG=zh_CN.UTF-8
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	KDEDIRS=/usr
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PGSYSCONFDIR=/home/postgresql/pg15/opt/pgsql/etc
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PGHOME=/home/postgresql/pg15/opt/pgsql
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	HISTCONTROL=ignoredups
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	HOME=/home/postgresql
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	SHLVL=1
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	CFLAGS=-I/usr/local/openssl - 3.4.0/include
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PERL_LOCAL_LIB_ROOT=:/home/postgresql/perl5
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LOGNAME=postgresql
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	QTLIB=/usr/lib64/qt-3.3/lib
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	XDG_DATA_DIRS=/home/postgresql/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PGDATA=/app/pgdata1
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LESSOPEN=||/usr/bin/lesspipe.sh %s
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	PERL_MM_OPT=INSTALL_BASE=/home/postgresql/perl5
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LC_COLLATE=zh_CN.UTF-8
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LC_CTYPE=zh_CN.UTF-8
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LC_MESSAGES=zh_CN.UTF-8
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LC_MONETARY=C
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LC_NUMERIC=C
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  	LC_TIME=C
+2024-11-27 17:50:52.323 CST [111407] DEBUG:  -----------------------------------------
+2024-11-27 17:50:52.325 CST [111407] DEBUG:  registering background worker "logical replication launcher"
+2024-11-27 17:50:52.326 CST [111407] DEBUG:  invoking IpcMemoryCreate(size=149471232)
+2024-11-27 17:50:52.327 CST [111407] DEBUG:  mmap(150994944) with MAP_HUGETLB failed, huge pages disabled: 无法分配内存
+2024-11-27 17:50:52.340 CST [111407] DEBUG:  dynamic shared memory system will support 674 segments
+2024-11-27 17:50:52.341 CST [111407] DEBUG:  created dynamic shared memory control segment 3007584744 (26976 bytes)
+2024-11-27 17:50:52.342 CST [111407] DEBUG:  max_safe_fds = 987, usable_fds = 1000, already_open = 3
+2024-11-27 17:50:52.342 CST [111407] LOG:  redirecting log output to logging collector process
+2024-11-27 17:50:52.342 CST [111407] HINT:  Future log output will appear in directory "log".
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  logger shutting down
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  shmem_exit(0): 0 before_shmem_exit callbacks to make
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  shmem_exit(0): 0 on_shmem_exit callbacks to make
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  proc_exit(0): 0 callbacks to make
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  exit(0)
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  shmem_exit(-1): 0 before_shmem_exit callbacks to make
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  shmem_exit(-1): 0 on_shmem_exit callbacks to make
+2024-11-27 17:58:18.636 CST [111418] DEBUG:  proc_exit(-1): 0 callbacks to make
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  postgres: PostmasterMain: initial environment dump:
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  -----------------------------------------
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	LDFLAGS=-L/usr/local/openssl - 3.4.0/lib64
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	XDG_SESSION_ID=25
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	HOSTNAME=localhost.localdomain
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	TERM=xterm
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	SHELL=/bin/bash
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	HISTSIZE=1000
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	PERL5LIB=/home/postgresql/perl5/lib/perl5:
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	PG_GRANDPARENT_PID=123542
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	QTDIR=/usr/lib64/qt-3.3
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	PERL_MB_OPT=--install_base /home/postgresql/perl5
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	QTINC=/usr/lib64/qt-3.3/include
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	ANT_HOME=/usr/share/ant/bin
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	QT_GRAPHICSSYSTEM_CHECKED=1
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	USER=postgresql
+2024-11-27 17:58:18.729 CST [55136] DEBUG:  	LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PGPORT=5432
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LD_LIBRARY_PATH=/home/postgresql/pg15/opt/pgsql/lib:
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PATH=/usr/share/ant/bin/bin:/usr/share/ant/bin/bin:/home/postgresql/pg15/opt/pgsql/bin:/usr/lib64/qt-3.3/bin:/home/postgresql/perl5/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/postgresql/.local/bin:/home/postgresql/bin
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	MAIL=/var/spool/mail/postgresql
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	_=/home/postgresql/pg15/opt/pgsql/bin/pg_ctl
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PWD=/home/postgresql/pg15/postgresql-15.3/contrib/pgcrypto
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LANG=zh_CN.UTF-8
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	KDEDIRS=/usr
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PGSYSCONFDIR=/home/postgresql/pg15/opt/pgsql/etc
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PGHOME=/home/postgresql/pg15/opt/pgsql
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	HISTCONTROL=ignoredups
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	HOME=/home/postgresql
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	SHLVL=1
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	CFLAGS=-I/usr/local/openssl - 3.4.0/include
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PERL_LOCAL_LIB_ROOT=:/home/postgresql/perl5
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LOGNAME=postgresql
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	QTLIB=/usr/lib64/qt-3.3/lib
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	XDG_DATA_DIRS=/home/postgresql/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PGDATA=/app/pgdata1
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LESSOPEN=||/usr/bin/lesspipe.sh %s
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	PERL_MM_OPT=INSTALL_BASE=/home/postgresql/perl5
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LC_COLLATE=zh_CN.UTF-8
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LC_CTYPE=zh_CN.UTF-8
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LC_MESSAGES=zh_CN.UTF-8
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LC_MONETARY=C
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LC_NUMERIC=C
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  	LC_TIME=C
+2024-11-27 17:58:18.730 CST [55136] DEBUG:  -----------------------------------------
+2024-11-27 17:58:18.731 CST [55136] DEBUG:  registering background worker "logical replication launcher"
+2024-11-27 17:58:18.732 CST [55136] DEBUG:  invoking IpcMemoryCreate(size=149471232)
+2024-11-27 17:58:18.732 CST [55136] DEBUG:  mmap(150994944) with MAP_HUGETLB failed, huge pages disabled: 无法分配内存
+2024-11-27 17:58:18.750 CST [55136] DEBUG:  dynamic shared memory system will support 674 segments
+2024-11-27 17:58:18.751 CST [55136] DEBUG:  created dynamic shared memory control segment 2821831318 (26976 bytes)
+2024-11-27 17:58:18.751 CST [55136] DEBUG:  max_safe_fds = 987, usable_fds = 1000, already_open = 3
+2024-11-27 17:58:18.752 CST [55136] LOG:  redirecting log output to logging collector process
+2024-11-27 17:58:18.752 CST [55136] HINT:  Future log output will appear in directory "log".
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  logger shutting down
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  shmem_exit(0): 0 before_shmem_exit callbacks to make
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  shmem_exit(0): 0 on_shmem_exit callbacks to make
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  proc_exit(0): 0 callbacks to make
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  exit(0)
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  shmem_exit(-1): 0 before_shmem_exit callbacks to make
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  shmem_exit(-1): 0 on_shmem_exit callbacks to make
+2024-11-27 18:03:31.527 CST [55145] DEBUG:  proc_exit(-1): 0 callbacks to make
+2024-11-27 18:03:31.629 CST [107518] DEBUG:  postgres: PostmasterMain: initial environment dump:
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  -----------------------------------------
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LDFLAGS=-L/usr/local/openssl - 3.4.0/lib64
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	XDG_SESSION_ID=25
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	HOSTNAME=localhost.localdomain
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	TERM=xterm
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	SHELL=/bin/bash
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	HISTSIZE=1000
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PERL5LIB=/home/postgresql/perl5/lib/perl5:
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PG_GRANDPARENT_PID=123542
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	QTDIR=/usr/lib64/qt-3.3
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PERL_MB_OPT=--install_base /home/postgresql/perl5
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	QTINC=/usr/lib64/qt-3.3/include
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	ANT_HOME=/usr/share/ant/bin
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	QT_GRAPHICSSYSTEM_CHECKED=1
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	USER=postgresql
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PGPORT=5432
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LD_LIBRARY_PATH=/home/postgresql/pg15/opt/pgsql/lib:
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PATH=/usr/share/ant/bin/bin:/usr/share/ant/bin/bin:/home/postgresql/pg15/opt/pgsql/bin:/usr/lib64/qt-3.3/bin:/home/postgresql/perl5/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/postgresql/.local/bin:/home/postgresql/bin
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	MAIL=/var/spool/mail/postgresql
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	_=/home/postgresql/pg15/opt/pgsql/bin/pg_ctl
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PWD=/home/postgresql/pg15/postgresql-15.3/contrib/pgcrypto
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LANG=zh_CN.UTF-8
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	KDEDIRS=/usr
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PGSYSCONFDIR=/home/postgresql/pg15/opt/pgsql/etc
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PGHOME=/home/postgresql/pg15/opt/pgsql
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	HISTCONTROL=ignoredups
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	HOME=/home/postgresql
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	SHLVL=1
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	CFLAGS=-I/usr/local/openssl - 3.4.0/include
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PERL_LOCAL_LIB_ROOT=:/home/postgresql/perl5
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LOGNAME=postgresql
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	QTLIB=/usr/lib64/qt-3.3/lib
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	XDG_DATA_DIRS=/home/postgresql/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PGDATA=/app/pgdata1
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LESSOPEN=||/usr/bin/lesspipe.sh %s
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	PERL_MM_OPT=INSTALL_BASE=/home/postgresql/perl5
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LC_COLLATE=zh_CN.UTF-8
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LC_CTYPE=zh_CN.UTF-8
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LC_MESSAGES=zh_CN.UTF-8
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LC_MONETARY=C
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LC_NUMERIC=C
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  	LC_TIME=C
+2024-11-27 18:03:31.630 CST [107518] DEBUG:  -----------------------------------------
+2024-11-27 18:03:31.634 CST [107518] DEBUG:  registering background worker "logical replication launcher"
+2024-11-27 18:03:31.635 CST [107518] DEBUG:  invoking IpcMemoryCreate(size=149471232)
+2024-11-27 18:03:31.635 CST [107518] DEBUG:  mmap(150994944) with MAP_HUGETLB failed, huge pages disabled: 无法分配内存
+2024-11-27 18:03:31.649 CST [107518] DEBUG:  dynamic shared memory system will support 674 segments
+2024-11-27 18:03:31.650 CST [107518] DEBUG:  created dynamic shared memory control segment 2851050624 (26976 bytes)
+2024-11-27 18:03:31.650 CST [107518] DEBUG:  max_safe_fds = 987, usable_fds = 1000, already_open = 3
+2024-11-27 18:03:31.651 CST [107518] LOG:  redirecting log output to logging collector process
+2024-11-27 18:03:31.651 CST [107518] HINT:  Future log output will appear in directory "log".
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  logger shutting down
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  shmem_exit(0): 0 before_shmem_exit callbacks to make
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  shmem_exit(0): 0 on_shmem_exit callbacks to make
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  proc_exit(0): 0 callbacks to make
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  exit(0)
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  shmem_exit(-1): 0 before_shmem_exit callbacks to make
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  shmem_exit(-1): 0 on_shmem_exit callbacks to make
+2024-11-27 18:17:04.642 CST [107521] DEBUG:  proc_exit(-1): 0 callbacks to make
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  postgres: PostmasterMain: initial environment dump:
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  -----------------------------------------
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LDFLAGS=-L/usr/local/openssl - 3.4.0/lib64
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	XDG_SESSION_ID=25
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	HOSTNAME=localhost.localdomain
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	TERM=xterm
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	SHELL=/bin/bash
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	HISTSIZE=1000
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PERL5LIB=/home/postgresql/perl5/lib/perl5:
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PG_GRANDPARENT_PID=123542
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	QTDIR=/usr/lib64/qt-3.3
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PERL_MB_OPT=--install_base /home/postgresql/perl5
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	QTINC=/usr/lib64/qt-3.3/include
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	ANT_HOME=/usr/share/ant/bin
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	QT_GRAPHICSSYSTEM_CHECKED=1
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	USER=postgresql
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PGPORT=5432
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LD_LIBRARY_PATH=/home/postgresql/pg15/opt/pgsql/lib:
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PATH=/usr/share/ant/bin/bin:/usr/share/ant/bin/bin:/home/postgresql/pg15/opt/pgsql/bin:/usr/lib64/qt-3.3/bin:/home/postgresql/perl5/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/postgresql/.local/bin:/home/postgresql/bin
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	MAIL=/var/spool/mail/postgresql
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	_=/home/postgresql/pg15/opt/pgsql/bin/pg_ctl
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PWD=/home/postgresql/pg15/postgresql-15.3/contrib/pgcrypto
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LANG=zh_CN.UTF-8
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	KDEDIRS=/usr
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PGSYSCONFDIR=/home/postgresql/pg15/opt/pgsql/etc
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PGHOME=/home/postgresql/pg15/opt/pgsql
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	HISTCONTROL=ignoredups
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	HOME=/home/postgresql
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	SHLVL=1
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	CFLAGS=-I/usr/local/openssl - 3.4.0/include
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PERL_LOCAL_LIB_ROOT=:/home/postgresql/perl5
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LOGNAME=postgresql
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	QTLIB=/usr/lib64/qt-3.3/lib
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	XDG_DATA_DIRS=/home/postgresql/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PGDATA=/app/pgdata1
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LESSOPEN=||/usr/bin/lesspipe.sh %s
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	PERL_MM_OPT=INSTALL_BASE=/home/postgresql/perl5
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LC_COLLATE=zh_CN.UTF-8
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LC_CTYPE=zh_CN.UTF-8
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LC_MESSAGES=zh_CN.UTF-8
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LC_MONETARY=C
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LC_NUMERIC=C
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  	LC_TIME=C
+2024-11-27 18:17:04.722 CST [118319] DEBUG:  -----------------------------------------
+2024-11-27 18:17:04.724 CST [118319] DEBUG:  registering background worker "logical replication launcher"
+2024-11-27 18:17:04.725 CST [118319] DEBUG:  invoking IpcMemoryCreate(size=149471232)
+2024-11-27 18:17:04.725 CST [118319] DEBUG:  mmap(150994944) with MAP_HUGETLB failed, huge pages disabled: 无法分配内存
+2024-11-27 18:17:04.745 CST [118319] DEBUG:  dynamic shared memory system will support 674 segments
+2024-11-27 18:17:04.745 CST [118319] DEBUG:  created dynamic shared memory control segment 605398532 (26976 bytes)
+2024-11-27 18:17:04.746 CST [118319] DEBUG:  max_safe_fds = 987, usable_fds = 1000, already_open = 3
+2024-11-27 18:17:04.747 CST [118319] LOG:  redirecting log output to logging collector process
+2024-11-27 18:17:04.747 CST [118319] HINT:  Future log output will appear in directory "log".
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  logger shutting down
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  shmem_exit(0): 0 before_shmem_exit callbacks to make
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  shmem_exit(0): 0 on_shmem_exit callbacks to make
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  proc_exit(0): 0 callbacks to make
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  exit(0)
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  shmem_exit(-1): 0 before_shmem_exit callbacks to make
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  shmem_exit(-1): 0 on_shmem_exit callbacks to make
+2024-11-27 18:21:28.975 CST [118326] DEBUG:  proc_exit(-1): 0 callbacks to make
