@@ -6099,7 +6099,8 @@ get_target_list(List *targetList, deparse_context *context,
 		 * Otherwise, just use what we can find in the TLE.
 		 */
 		if (resultDesc && colno <= resultDesc->natts)
-			colname = NameStr(TupleDescAttr(resultDesc, colno - 1)->attname);
+			// colname = NameStr(TupleDescAttr(resultDesc, colno - 1)->attname);
+			colname = NameStr(TupleDescAttrAtPos(resultDesc, colno - 1)->attname);
 		else
 			colname = tle->resname;
 

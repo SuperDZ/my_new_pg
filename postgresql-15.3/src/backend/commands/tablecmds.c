@@ -2530,8 +2530,9 @@ MergeAttributes(List *schema, List *supers, char relpersistence,
 		for (parent_attno = 1; parent_attno <= tupleDesc->natts;
 			 parent_attno++)
 		{
-			Form_pg_attribute attribute = TupleDescAttr(tupleDesc,
-														parent_attno - 1);
+			// Form_pg_attribute attribute = TupleDescAttr(tupleDesc,
+			// 											parent_attno - 1);
+			Form_pg_attribute attribute = TupleDescAttrAtPos(tupleDesc, parent_attno - 1);
 			char	   *attributeName = NameStr(attribute->attname);
 			int			exist_attno;
 			ColumnDef  *def;
@@ -4262,6 +4263,7 @@ AlterTableGetLockLevel(List *cmds)
 			case AT_DisableRowSecurity:
 			case AT_ForceRowSecurity:
 			case AT_NoForceRowSecurity:
+			case AT_AlterComment:
 			case AT_AddIdentity:
 			case AT_DropIdentity:
 			case AT_SetIdentity:
@@ -4818,6 +4820,9 @@ ATPrepCmd(List **wqueue, Relation rel, AlterTableCmd *cmd,
 			/* No command-specific prep needed */
 			pass = AT_PASS_MISC;
 			break;
+		case AT_AlterComment:
+			pass = AT_PASS_MISC;
+			break;
 		default:				/* oops */
 			elog(ERROR, "unrecognized alter table type: %d",
 				 (int) cmd->subtype);
@@ -5239,6 +5244,12 @@ ATExecCmd(List **wqueue, AlteredTableInfo *tab,
 		case AT_DetachPartitionFinalize:
 			ATExecDetachPartitionFinalize(rel, ((PartitionCmd *) cmd->def)->name);
 			break;
+		case AT_AlterComment:
+			cmd = ATParseTransformCmd(wqueue, tab, rel, cmd, false, lockmode,
+									  cur_pass, context);
+			address = CommentObject(cmd->comment);
+			break;
+
 		default:				/* oops */
 			elog(ERROR, "unrecognized alter table type: %d",
 				 (int) cmd->subtype);
@@ -6228,6 +6239,8 @@ alter_table_type_to_string(AlterTableType cmdtype)
 			return "DETACH PARTITION ... FINALIZE";
 		case AT_AddIdentity:
 			return "ALTER COLUMN ... ADD IDENTITY";
+		case AT_AlterComment:
+			return "ALTER COMMENT";
 		case AT_SetIdentity:
 			return "ALTER COLUMN ... SET";
 		case AT_DropIdentity:
@@ -6744,6 +6757,7 @@ ATExecAddColumn(List **wqueue, AlteredTableInfo *tab, Relation rel,
 	ObjectAddress address;
 	TupleDesc	tupdesc;
 	FormData_pg_attribute *aattr[] = {&attribute};
+	ColumnPos	*colPos = (ColumnPos *)colDef->colposition;
 
 	/* At top level, permission check was done in ATPrepCmd, else do it */
 	if (recursing)
@@ -6902,6 +6916,67 @@ ATExecAddColumn(List **wqueue, AlteredTableInfo *tab, Relation rel,
 	attribute.attislocal = colDef->is_local;
 	attribute.attinhcount = colDef->inhcount;
 	attribute.attcollation = collOid;
+
+	if (colPos != NULL)
+	{
+		TupleDesc			tupleDesc = NULL;
+		Form_pg_attribute	atts = NULL;
+		int16				start_pos = 1;
+		int					i = 0;
+
+		if (!enable_mysql_attpos)
+		{
+			ereport(ERROR,
+					(errcode(ERRCODE_CONFIGURATION_LIMIT_EXCEEDED),
+					 errmsg("enable_mysql_attpos is off")));
+		}
+
+		tupleDesc = rel->rd_att;
+
+		atts = tupleDesc->attrs;
+
+		if (!colPos->is_first)
+		{
+			for (i = 0; i < tupleDesc->natts; i++)
+			{
+				if (namestrcmp(&(atts[i].attname), colPos->based_colname) == 0)
+				{
+					start_pos = atts[i].attpos + 1;
+					break;
+				}
+
+				/* throw error if no column found */
+				if (i == tupleDesc->natts - 1)
+					ereport(ERROR,
+							(errcode(ERRCODE_UNDEFINED_COLUMN),
+							 errmsg("column \"%s\" in \"%s\" does not exist",
+									colPos->based_colname, RelationGetRelationName(rel))));
+			}
+
+		}
+
+		for (i = 0; i < tupleDesc->natts; i++)
+		{
+			HeapTuple tuple;
+			Form_pg_attribute attr;
+			if (atts[i].attpos < start_pos)
+				continue;
+			tuple = SearchSysCacheCopy2(ATTNUM,
+								ObjectIdGetDatum(myrelid),
+								Int16GetDatum(i + 1));
+
+			if (!HeapTupleIsValid(tuple))
+				elog(ERROR, "cache lookup failed for %dth column", i + 1);
+
+			attr = (Form_pg_attribute)GETSTRUCT(tuple);
+			attr->attpos++;
+			CatalogTupleUpdate(attrdesc, &tuple->t_self, tuple);
+		}
+
+		attribute.attpos = start_pos;
+	}
+	else
+		attribute.attpos = newattnum;
 
 	ReleaseSysCache(typeTuple);
 
@@ -12533,6 +12608,7 @@ ATExecAlterColumnType(AlteredTableInfo *tab, Relation rel,
 	SysScanDesc scan;
 	HeapTuple	depTup;
 	ObjectAddress address;
+	ColumnPos	*colPos = (ColumnPos *)def->colposition;
 
 	/*
 	 * Clear all the missing values if we're rewriting the table, since this
@@ -12953,6 +13029,107 @@ ATExecAlterColumnType(AlteredTableInfo *tab, Relation rel,
 	attTup->attalign = tform->typalign;
 	attTup->attstorage = tform->typstorage;
 	attTup->attcompression = InvalidCompressionMethod;
+
+	if (colPos != NULL)
+	{
+		TupleDesc			tupleDesc = NULL;
+		Form_pg_attribute	atts = NULL;
+		int16				new_pos = 1;
+		int16				old_pos = attTup->attpos;
+		int					i = 0;
+
+		if (!enable_mysql_attpos)
+		{
+			ereport(ERROR,
+					(errcode(ERRCODE_CONFIGURATION_LIMIT_EXCEEDED),
+					 errmsg("enable_mysql_attpos is off")));
+		}
+
+		tupleDesc = rel->rd_att;
+
+		atts = tupleDesc->attrs;
+
+		if (!colPos->is_first)
+		{
+			if (namestrcmp(&(attTup->attname), colPos->based_colname) == 0)
+				ereport(ERROR,
+						(errcode(ERRCODE_UNDEFINED_COLUMN),
+						 errmsg("column \"%s\" in \"%s\" does not exist",
+								colPos->based_colname,
+								RelationGetRelationName(rel))));
+
+			for (i = 0; i < tupleDesc->natts; i++)
+			{
+
+				if (namestrcmp(&(atts[i].attname), colPos->based_colname) == 0)
+				{
+						if (atts[i].attpos > old_pos)
+						new_pos = atts[i].attpos;
+						else
+						new_pos = atts[i].attpos + 1;
+						break;
+				}
+
+				/* throw error if no column found */
+				if (i == tupleDesc->natts - 1)
+						ereport(ERROR,
+								(errcode(ERRCODE_UNDEFINED_COLUMN),
+								 errmsg("invalid column \"%s\" of relation \"%s\"",
+										colPos->based_colname,
+										RelationGetRelationName(rel))));
+			}
+		}
+
+		if (old_pos > new_pos)
+		{
+			for (i = 0; i < tupleDesc->natts; i++)
+			{
+				HeapTuple tuple;
+				Form_pg_attribute attr;
+				if (atts[i].attpos < new_pos)
+						continue;
+				if (atts[i].attpos >= old_pos)
+						continue;
+
+				tuple = SearchSysCacheCopy2(ATTNUM,
+								ObjectIdGetDatum(RelationGetRelid(rel)),
+								Int16GetDatum(i + 1));
+
+				if (!HeapTupleIsValid(tuple))
+						elog(ERROR, "cache lookup failed for %dth column", i + 1);
+
+				attr = (Form_pg_attribute)GETSTRUCT(tuple);
+				attr->attpos++;
+				CatalogTupleUpdate(attrelation, &tuple->t_self, tuple);
+			}
+
+		}
+		else if(old_pos < new_pos)
+		{
+			for (i = 0; i < tupleDesc->natts; i++)
+			{
+				HeapTuple tuple;
+				Form_pg_attribute attr;
+				if (atts[i].attpos <= old_pos)
+						continue;
+				if (atts[i].attpos > new_pos)
+						continue;
+
+				tuple = SearchSysCacheCopy2(ATTNUM,
+								ObjectIdGetDatum(RelationGetRelid(rel)),
+								Int16GetDatum(i + 1));
+
+				if (!HeapTupleIsValid(tuple))
+						elog(ERROR, "cache lookup failed for %dth column", i + 1);
+
+				attr = (Form_pg_attribute)GETSTRUCT(tuple);
+				attr->attpos--;
+				CatalogTupleUpdate(attrelation, &tuple->t_self, tuple);
+			}
+		}
+		attTup->attpos = new_pos;
+	}
+
 
 	ReleaseSysCache(typeTuple);
 

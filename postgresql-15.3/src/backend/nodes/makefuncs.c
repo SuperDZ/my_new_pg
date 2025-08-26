@@ -20,6 +20,7 @@
 #include "nodes/makefuncs.h"
 #include "nodes/nodeFuncs.h"
 #include "utils/lsyscache.h"
+#include "nodes/parsenodes.h"
 
 
 /*
@@ -476,6 +477,18 @@ makeTypeNameFromOid(Oid typeOid, int32 typmod)
 	n->typeOid = typeOid;
 	n->typemod = typmod;
 	n->location = -1;
+	return n;
+}
+
+ColumnPos *
+makeColumnPos(const char *colname, bool is_first)
+{
+	ColumnPos  *n = makeNode(ColumnPos);
+
+	n->based_colname = pstrdup(colname);
+	n->is_first = is_first;
+	n->location = -1;
+
 	return n;
 }
 

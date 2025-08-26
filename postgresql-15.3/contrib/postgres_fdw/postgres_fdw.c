@@ -5395,7 +5395,10 @@ postgresImportForeignSchema(ImportForeignSchemaStmt *stmt, Oid serverOid)
 		}
 
 		/* Append ORDER BY at the end of query to ensure output ordering */
-		appendStringInfoString(&buf, " ORDER BY c.relname, a.attnum");
+		if (enable_mysql_attpos)
+			appendStringInfoString(&buf, " ORDER BY c.relname, a.attpos");
+		else
+			appendStringInfoString(&buf, " ORDER BY c.relname, a.attnum");
 
 		/* Fetch the data */
 		res = pgfdw_exec_query(conn, buf.data, NULL);

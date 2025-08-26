@@ -518,6 +518,8 @@ DefineAttr(char *name, char *type, int attnum, int nullness)
 	namestrcpy(&attrtypes[attnum]->attname, name);
 	elog(DEBUG4, "column %s %s", NameStr(attrtypes[attnum]->attname), type);
 	attrtypes[attnum]->attnum = attnum + 1;
+	attrtypes[attnum]->attpos = attnum + 1;	
+
 
 	typeoid = gettype(type);
 
@@ -620,7 +622,8 @@ InsertOneTuple(void)
 
 	tupDesc = CreateTupleDesc(numattr, attrtypes);
 	tuple = heap_form_tuple(tupDesc, values, Nulls);
-	pfree(tupDesc);				/* just free's tupDesc, not the attrtypes */
+	// pfree(tupDesc);				/* just free's tupDesc, not the attrtypes */
+	FreeTupleDesc(tupDesc);
 
 	simple_heap_insert(boot_reldesc, tuple);
 	heap_freetuple(tuple);

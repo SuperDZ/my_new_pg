@@ -733,11 +733,14 @@ CopyGetAttnums(TupleDesc tupDesc, Relation rel, List *attnamelist)
 
 		for (i = 0; i < attr_count; i++)
 		{
-			if (TupleDescAttr(tupDesc, i)->attisdropped)
+			// if (TupleDescAttr(tupDesc, i)->attisdropped)
+			if (TupleDescAttrAtPos(tupDesc, i)->attisdropped)
 				continue;
-			if (TupleDescAttr(tupDesc, i)->attgenerated)
+			// if (TupleDescAttr(tupDesc, i)->attgenerated)
+			if (TupleDescAttrAtPos(tupDesc, i)->attisdropped)
 				continue;
-			attnums = lappend_int(attnums, i + 1);
+			// attnums = lappend_int(attnums, i + 1);
+			attnums = lappend_int(attnums, TupleDescAttrAtPos(tupDesc, i)->attnum);
 		}
 	}
 	else
@@ -755,7 +758,8 @@ CopyGetAttnums(TupleDesc tupDesc, Relation rel, List *attnamelist)
 			attnum = InvalidAttrNumber;
 			for (i = 0; i < tupDesc->natts; i++)
 			{
-				Form_pg_attribute att = TupleDescAttr(tupDesc, i);
+				// Form_pg_attribute att = TupleDescAttr(tupDesc, i);
+				Form_pg_attribute att = TupleDescAttrAtPos(tupDesc, i);
 
 				if (att->attisdropped)
 					continue;

@@ -311,11 +311,13 @@ ConstructTupleDescriptor(Relation heapRelation,
 
 		MemSet(to, 0, ATTRIBUTE_FIXED_PART_SIZE);
 		to->attnum = i + 1;
+		to->attpos = i + 1;
 		to->attstattarget = -1;
 		to->attcacheoff = -1;
 		to->attislocal = true;
 		to->attcollation = (i < numkeyatts) ?
 			collationObjectId[i] : InvalidOid;
+		indexTupDesc->attposmap[i] = i;
 
 		/*
 		 * Set the attribute name as specified by caller.

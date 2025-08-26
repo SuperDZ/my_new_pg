@@ -790,6 +790,7 @@ scanRTEForColumn(ParseState *pstate, RangeTblEntry *rte,
 {
 	int			result = InvalidAttrNumber;
 	int			attnum = 0;
+	int 		i = 0;
 	ListCell   *c;
 
 	/*
@@ -809,7 +810,12 @@ scanRTEForColumn(ParseState *pstate, RangeTblEntry *rte,
 	{
 		const char *attcolname = strVal(lfirst(c));
 
-		attnum++;
+		if (rte->eref->attnums != NIL)
+			attnum = list_nth_int(rte->eref->attnums, i);
+		else
+			attnum++;
+		i++;
+
 		if (strcmp(attcolname, colname) == 0)
 		{
 			if (result)
@@ -1150,7 +1156,8 @@ buildRelationAliases(TupleDesc tupdesc, Alias *alias, Alias *eref)
 
 	for (varattno = 0; varattno < maxattrs; varattno++)
 	{
-		Form_pg_attribute attr = TupleDescAttr(tupdesc, varattno);
+		// Form_pg_attribute attr = TupleDescAttr(tupdesc, varattno);
+		Form_pg_attribute attr = TupleDescAttrAtPos(tupdesc, varattno);
 		String	   *attrname;
 
 		if (attr->attisdropped)
@@ -1175,6 +1182,8 @@ buildRelationAliases(TupleDesc tupdesc, Alias *alias, Alias *eref)
 		}
 
 		eref->colnames = lappend(eref->colnames, attrname);
+
+		eref->attnums = lappend_int(eref->attnums, attr->attnum);
 	}
 
 	/* Too many user-supplied aliases? */
@@ -3032,7 +3041,9 @@ expandTupleDesc(TupleDesc tupdesc, Alias *eref, int count, int offset,
 	Assert(count <= tupdesc->natts);
 	for (varattno = 0; varattno < count; varattno++)
 	{
-		Form_pg_attribute attr = TupleDescAttr(tupdesc, varattno);
+		// Form_pg_attribute attr = TupleDescAttr(tupdesc, varattno);
+
+		Form_pg_attribute attr = TupleDescAttrAtPos(tupdesc, varattno);
 
 		if (attr->attisdropped)
 		{
@@ -3076,10 +3087,17 @@ expandTupleDesc(TupleDesc tupdesc, Alias *eref, int count, int offset,
 		{
 			Var		   *varnode;
 
-			varnode = makeVar(rtindex, varattno + offset + 1,
-							  attr->atttypid, attr->atttypmod,
-							  attr->attcollation,
-							  sublevels_up);
+			// varnode = makeVar(rtindex, varattno + offset + 1,
+			// 				  attr->atttypid, attr->atttypmod,
+			// 				  attr->attcollation,
+			// 				  sublevels_up);
+			// varnode->location = location;
+
+			varnode = makeVar(rtindex, attr->attnum + offset,
+				attr->atttypid, attr->atttypmod,
+				attr->attcollation,
+				sublevels_up);
+			varnode->varattpos = varattno + 1;
 			varnode->location = location;
 
 			*colvars = lappend(*colvars, varnode);

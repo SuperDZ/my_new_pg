@@ -45,6 +45,7 @@ TupleDesc
 CreateTemplateTupleDesc(int natts)
 {
 	TupleDesc	desc;
+	int16		i;
 
 	/*
 	 * sanity checks
@@ -75,6 +76,10 @@ CreateTemplateTupleDesc(int natts)
 	desc->tdtypmod = -1;
 	desc->tdrefcount = -1;		/* assume not reference-counted */
 
+	desc->attposmap = (int16 *)palloc(natts * sizeof(int16));
+	for (i = 0; i < natts; i++)
+		desc->attposmap[i] = i;
+
 	return desc;
 }
 
@@ -97,6 +102,7 @@ CreateTupleDesc(int natts, Form_pg_attribute *attrs)
 	for (i = 0; i < natts; ++i)
 		memcpy(TupleDescAttr(desc, i), attrs[i], ATTRIBUTE_FIXED_PART_SIZE);
 
+	desc->attposmap = NULL;
 	return desc;
 }
 
@@ -119,6 +125,10 @@ CreateTupleDescCopy(TupleDesc tupdesc)
 	memcpy(TupleDescAttr(desc, 0),
 		   TupleDescAttr(tupdesc, 0),
 		   desc->natts * sizeof(FormData_pg_attribute));
+	
+	if (tupdesc->attposmap != NULL)
+		memcpy(desc->attposmap, tupdesc->attposmap, desc->natts * sizeof(int16));
+   
 
 	/*
 	 * Since we're not copying constraints and defaults, clear fields
@@ -160,6 +170,10 @@ CreateTupleDescCopyConstr(TupleDesc tupdesc)
 	memcpy(TupleDescAttr(desc, 0),
 		   TupleDescAttr(tupdesc, 0),
 		   desc->natts * sizeof(FormData_pg_attribute));
+
+	if (tupdesc->attposmap != NULL)
+		memcpy(desc->attposmap, tupdesc->attposmap, desc->natts * sizeof(int16));
+
 
 	/* Copy the TupleConstr data structure, if any */
 	if (constr)
@@ -233,6 +247,8 @@ TupleDescCopy(TupleDesc dst, TupleDesc src)
 	/* Flat-copy the header and attribute array */
 	memcpy(dst, src, TupleDescSize(src));
 
+	dst->attposmap = NULL;
+
 	/*
 	 * Since we're not copying constraints and defaults, clear fields
 	 * associated with them.
@@ -281,6 +297,10 @@ TupleDescCopyEntry(TupleDesc dst, AttrNumber dstAttno,
 	AssertArg(dstAttno <= dst->natts);
 
 	memcpy(dstAtt, srcAtt, ATTRIBUTE_FIXED_PART_SIZE);
+
+	if (dst->attposmap != NULL)
+		dst->attposmap[dstAttno - 1] = dstAttno - 1;
+
 
 	/*
 	 * Aside from updating the attno, we'd better reset attcacheoff.
@@ -351,6 +371,9 @@ FreeTupleDesc(TupleDesc tupdesc)
 		}
 		pfree(tupdesc->constr);
 	}
+	
+	if (tupdesc->attposmap != NULL)
+		pfree(tupdesc->attposmap);
 
 	pfree(tupdesc);
 }
@@ -411,8 +434,12 @@ equalTupleDescs(TupleDesc tupdesc1, TupleDesc tupdesc2)
 
 	for (i = 0; i < tupdesc1->natts; i++)
 	{
-		Form_pg_attribute attr1 = TupleDescAttr(tupdesc1, i);
-		Form_pg_attribute attr2 = TupleDescAttr(tupdesc2, i);
+		// Form_pg_attribute attr1 = TupleDescAttr(tupdesc1, i);
+		// Form_pg_attribute attr2 = TupleDescAttr(tupdesc2, i);
+
+		Form_pg_attribute attr1 = TupleDescAttrAtPos(tupdesc1, i);
+		Form_pg_attribute attr2 = TupleDescAttrAtPos(tupdesc2, i);
+
 
 		/*
 		 * We do not need to check every single field here: we can disregard
@@ -559,7 +586,8 @@ hashTupleDesc(TupleDesc desc)
 	s = hash_combine(0, hash_uint32(desc->natts));
 	s = hash_combine(s, hash_uint32(desc->tdtypeid));
 	for (i = 0; i < desc->natts; ++i)
-		s = hash_combine(s, hash_uint32(TupleDescAttr(desc, i)->atttypid));
+		s = hash_combine(s, hash_uint32(TupleDescAttrAtPos(desc, i)->atttypid));
+		// s = hash_combine(s, hash_uint32(TupleDescAttr(desc, i)->atttypid));
 
 	return s;
 }
@@ -630,6 +658,8 @@ TupleDescInitEntry(TupleDesc desc,
 	att->attisdropped = false;
 	att->attislocal = true;
 	att->attinhcount = 0;
+
+	att->attpos = attributeNumber;
 	/* variable-length fields are not present in tupledescs */
 
 	tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(oidtypeid));
@@ -691,6 +721,8 @@ TupleDescInitBuiltinEntry(TupleDesc desc,
 	att->attisdropped = false;
 	att->attislocal = true;
 	att->attinhcount = 0;
+
+	att->attpos = attributeNumber;
 	/* variable-length fields are not present in tupledescs */
 
 	att->atttypid = oidtypeid;

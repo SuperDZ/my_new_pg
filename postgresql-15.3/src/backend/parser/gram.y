@@ -200,6 +200,7 @@ static void doNegateFloat(Float *v);
 static Node *makeAndExpr(Node *lexpr, Node *rexpr, int location);
 static Node *makeOrExpr(Node *lexpr, Node *rexpr, int location);
 static Node *makeNotExpr(Node *expr, int location);
+static Node *makeNotExpr_mys(Node *expr, int location);
 static Node *makeAArrayExpr(List *elements, int location);
 static Node *makeSQLValueFunction(SQLValueFunctionOp op, int32 typmod,
 								  int location);
@@ -220,6 +221,10 @@ static void processCASbits(int cas_bits, int location, const char *constrType,
 static void preprocess_pubobj_list(List *pubobjspec_list,
 								   core_yyscan_t yyscanner);
 static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
+
+static CommentStmt * makeCommentNode(ObjectType objtype, char *comment, char *tableName, char *columnName);
+static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,List *columnList);
+
 
 %}
 
@@ -330,8 +335,9 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 %type <node>	alter_column_default opclass_item opclass_drop alter_using
 %type <ival>	add_drop opt_asc_desc opt_nulls_order
 
-%type <node>	alter_table_cmd alter_type_cmd opt_collate_clause
+%type <node>	alter_table_cmd alter_type_cmd opt_collate_clause opt_column_pos
 	   replica_identity partition_cmd index_partition_cmd
+%type <list>	OptModifyIncrement
 %type <list>	alter_table_cmds alter_type_cmds
 %type <list>    alter_identity_column_option_list
 %type <defelt>  alter_identity_column_option
@@ -517,7 +523,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 				 SetResetClause FunctionSetResetClause
 
 %type <node>	TableElement TypedTableElement ConstraintElem TableFuncElement
-%type <node>	columnDef columnOptions
+%type <node>	columnDef columnOptions columnDefModify
 %type <defelt>	def_elem reloption_elem old_aggr_elem operator_def_elem
 %type <node>	def_arg columnElem where_clause where_or_current_clause
 				a_expr b_expr c_expr AexprConst indirection_el opt_slice_bound
@@ -639,7 +645,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 %type <partboundspec> PartitionBoundSpec
 %type <list>		hash_partbound
 %type <defelt>		hash_partbound_elem
-
+%type <str>		OptCommentSpecMulti OptCommentSpecWithoutEqMulti CommentSpecMulti CommentSpec CommentSpecWithoutEqMulti CommentSpecWithEq CommentSpecWithoutEq 
 
 /*
  * Non-keyword token types.  These are hard-wired into the "flex" lexer.
@@ -669,6 +675,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 %token <keyword> ABORT_P ABSOLUTE_P ACCESS ACTION ADD_P ADMIN AFTER
 	AGGREGATE ALL ALSO ALTER ALWAYS ANALYSE ANALYZE AND ANY ARRAY AS ASC
 	ASENSITIVE ASSERTION ASSIGNMENT ASYMMETRIC ATOMIC AT ATTACH ATTRIBUTE AUTHORIZATION
+	AUTO_INCREMENT
 
 	BACKWARD BEFORE BEGIN_P BETWEEN BIGINT BINARY BIT
 	BOOLEAN_P BOTH BREADTH BY
@@ -712,12 +719,12 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 	LOCALTIME LOCALTIMESTAMP LOCATION LOCK_P LOCKED LOGGED
 
 	MAPPING MATCH MATCHED MATERIALIZED MAXVALUE MERGE METHOD
-	MINUTE_P MINVALUE MODE MONTH_P MOVE
+	MINUTE_P MINVALUE MODE MODIFY MONTH_P MOVE
 
-	NAME_P NAMES NATIONAL NATURAL NCHAR NEW NEXT NFC NFD NFKC NFKD NO NONE
+	NAME_P NAMES NATIONAL NATURAL NCHAR NEW NEXT NFC NFD NFKC NFKD NO NONE NOT_NOTEXC
 	NORMALIZE NORMALIZED
 	NOT NOTHING NOTIFY NOTNULL NOWAIT NULL_P NULLIF
-	NULLS_P NUMERIC
+	NULLS_P NUMERIC 
 
 	OBJECT_P OF OFF OFFSET OIDS OLD ON ONLY OPERATOR OPTION OPTIONS OR
 	ORDER ORDINALITY OTHERS OUT_P OUTER_P
@@ -771,7 +778,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
  * as NOT, at least with respect to their left-hand subexpression.
  * NULLS_LA and WITH_LA are needed to make the grammar LALR(1).
  */
-%token		NOT_LA NULLS_LA WITH_LA
+%token		NOT_LA NOT_LAEXC NULLS_LA WITH_LA
 
 /*
  * The grammar likewise thinks these tokens are keywords, but they are never
@@ -795,7 +802,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 %left		AND
 %right		NOT
 %nonassoc	IS ISNULL NOTNULL	/* IS sets precedence for IS NULL, etc */
-%nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS
+%nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS NOT_NOTEXC NOT_LAEXC
 %nonassoc	BETWEEN IN_P LIKE ILIKE SIMILAR NOT_LA
 %nonassoc	ESCAPE			/* ESCAPE must be just above LIKE/ILIKE/SIMILAR */
 /*
@@ -825,6 +832,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
  */
 %nonassoc	UNBOUNDED		/* ideally would have same precedence as IDENT */
 %nonassoc	IDENT PARTITION RANGE ROWS GROUPS PRECEDING FOLLOWING CUBE ROLLUP
+%nonassoc	AUTO_INCREMENT
 %left		Op OPERATOR		/* multi-character ops and user-defined operators */
 %left		'+' '-'
 %left		'*' '/' '%'
@@ -2224,8 +2232,20 @@ AlterTableStmt:
 		;
 
 alter_table_cmds:
-			alter_table_cmd							{ $$ = list_make1($1); }
-			| alter_table_cmds ',' alter_table_cmd	{ $$ = lappend($1, $3); }
+			alter_table_cmd
+				{
+					if(IsA($1, List))
+						$$ = (List *)$1;
+					else 
+						$$ = list_make1($1); 
+				}
+			| alter_table_cmds ',' alter_table_cmd	
+				{ 	
+					if(IsA($3, List))
+						$$ = list_concat($1, (List *)$3);
+					else
+						$$ = lappend($1, $3); 
+					}
 		;
 
 partition_cmd:
@@ -2530,6 +2550,128 @@ alter_table_cmd:
 					def->location = @3;
 					$$ = (Node *) n;
 				}
+
+			| MODIFY opt_column ColId Typename AUTO_INCREMENT OptModifyIncrement
+			{
+				AlterTableCmd *n = makeNode(AlterTableCmd);
+				Constraint *c = makeNode(Constraint);
+				c->contype = CONSTR_IDENTITY;
+				c->generated_when = ATTRIBUTE_IDENTITY_ALWAYS;
+				c->options = $6;
+				c->location = @5;
+				c->skip_validation = false;
+				c->initially_valid = true;
+				n->subtype = AT_AddIdentity;
+				n->name = $3;
+				n->def = (Node *) c;
+				$$ = (Node *)n;
+			}
+			/*mzj*/
+			| MODIFY opt_column ColId columnDefModify opt_column_pos
+				{
+					List *cellList = NULL;
+					ListCell   *clist;
+					AlterTableCmd *n_type = makeNode(AlterTableCmd);									
+					ColumnDef *def = makeNode(ColumnDef);
+					ColumnDef *defcol = (ColumnDef *)$4;
+
+					/* 修改列类型 */
+					n_type->subtype = AT_AlterColumnType;
+					n_type->name = $3;
+					n_type->def = (Node *) def;
+					def->typeName = defcol->typeName;
+					// def->comment = NULL;
+					// def->typeName = $4;
+					// check_alter_column_len(def->typeName);
+					def->collClause = defcol->collClause; 
+					def->colposition = $5; 
+					cellList = lappend(cellList, (Node *)n_type);
+					if(defcol->comment)
+					{
+						CommentStmt *n_comment = makeNode(CommentStmt);
+						AlterTableCmd *n = makeNode(AlterTableCmd);
+						n_comment->objtype = OBJECT_COLUMN;
+						n_comment->comment = ((ColumnDef *)$4)->comment;
+						n_comment->object = (Node *)list_make1(makeString($3));
+						n->subtype = AT_AlterComment;
+						n->comment = n_comment;
+						cellList = lappend(cellList, (Node *)n);
+					}
+					/* 修改约束 */
+					foreach(clist, defcol->constraints)
+					{
+						Constraint *constraint = lfirst_node(Constraint, clist);
+						AlterTableCmd *n_con = makeNode(AlterTableCmd);
+						Constraint *condef = makeNode(Constraint);
+						List *keyList = NULL;
+						// condef->is_enable = true;
+						condef->skip_validation = false;
+						condef->initially_valid = true;
+						switch (constraint->contype)
+						{
+							case CONSTR_NULL:		
+								n_con->subtype = AT_DropNotNull;
+								n_con->name = $3;			
+								break;
+							case CONSTR_NOTNULL:
+								n_con->subtype = AT_SetNotNull;
+								n_con->name = $3;
+								break;
+							case CONSTR_DEFAULT:
+								n_con->subtype = AT_ColumnDefault;
+								n_con->name = $3;
+								n_con->def = constraint->raw_expr;
+								break;
+							case CONSTR_UNIQUE:
+								n_con->subtype = AT_AddConstraint;
+								n_con->name = $3;
+								condef->contype = CONSTR_UNIQUE;
+								keyList = lappend(keyList, (Node *) makeString($3));
+								condef->keys = keyList;
+								n_con->def = (Node *)condef;
+								break;
+							case CONSTR_PRIMARY:
+								n_con->subtype = AT_AddConstraint;
+								n_con->name = $3;
+								condef->contype = CONSTR_PRIMARY;
+								keyList = lappend(keyList, (Node *) makeString($3));
+								condef->keys = keyList;
+								n_con->def = (Node *)condef;
+								break;
+							case CONSTR_IDENTITY:
+								n_con->subtype = AT_AddIdentity;
+								n_con->name = $3;
+								condef->generated_when=constraint->generated_when;
+								condef->options=constraint->options;
+								n_con->def = (Node *)condef;
+								break;
+							case CONSTR_GENERATED:
+								elog(ERROR, "ALTER TABLE cannot support generated always with expr");
+								break;
+							default:
+								elog(ERROR, "alter table modify cannot support this usage");
+								break;
+						}
+						cellList = lappend(cellList, (Node *)n_con);
+					}
+					// if(((ColumnDef *)$4)->comment)
+					// {
+					// 	CommentStmt *n_comment = makeNode(CommentStmt);
+					// 	AlterTableCmd *n = makeNode(AlterTableCmd);
+					// 	n_comment->objtype = OBJECT_COLUMN;
+					// 	n_comment->comment = ((ColumnDef *)$4)->comment;
+					// 	n_comment->object = (Node *)list_make1(makeString($3));
+					// 	n->subtype = AT_AlterComment;
+					// 	n->comment = n_comment;
+					// 	cellList = lappend(cellList, (Node *)n);
+					// }
+					$$ = (Node *)cellList;
+				}
+			
+
+
+
+			/*mzj*/
 			/* ALTER FOREIGN TABLE <name> ALTER [COLUMN] <colname> OPTIONS */
 			| ALTER opt_column ColId alter_generic_options
 				{
@@ -2876,6 +3018,66 @@ alter_table_cmd:
 				}
 		;
 
+columnDefModify: Typename create_generic_options ColQualList OptCommentSpecWithoutEqMulti 
+		   {
+				ColumnDef *n = makeNode(ColumnDef);
+				n->typeName = $1;
+				n->inhcount = 0;
+				n->is_local = true;
+				n->is_not_null = false;
+				n->is_from_type = false;
+				n->storage = 0;
+				n->raw_default = NULL;
+				n->fdwoptions = $2;
+				SplitColQualList($3, &n->constraints, &n->collClause,
+								 yyscanner);
+				n->location = @1;
+				n->comment = $4;
+				$$ = (Node *)n;
+			}
+		;
+
+OptCommentSpecMulti: CommentSpecMulti					{ $$ = $1; }
+			| /*EMPTY*/									{ $$ = NULL; }
+		;
+
+OptCommentSpecWithoutEqMulti: CommentSpecWithoutEqMulti	{ $$ = $1; }
+			| /*EMPTY*/									{ $$ = NULL; }
+		;
+
+CommentSpecMulti: CommentSpecMulti CommentSpec			{ $$ = $2; }
+			| CommentSpec								{ $$ = $1; }
+		;
+
+CommentSpec: CommentSpecWithEq							{ $$ = $1; }
+			| CommentSpecWithoutEq						{ $$ = $1; }
+		;
+
+CommentSpecWithoutEqMulti: CommentSpecWithoutEqMulti CommentSpecWithoutEq	{ $$ = $2; }
+			| CommentSpecWithoutEq											{ $$ = $1; }
+		;
+
+CommentSpecWithEq: COMMENT '=' comment_text
+			{
+				if($3 == NULL)
+				{
+					parser_yyerror("comment content can't be NULL");
+				}
+				$$ = $3;
+			}
+		;
+
+CommentSpecWithoutEq: COMMENT comment_text
+			{
+				if($2 == NULL)
+				{
+					parser_yyerror("comment content can't be NULL");
+				}
+				$$ = $2;
+			}
+		;
+
+
 alter_column_default:
 			SET DEFAULT a_expr			{ $$ = $3; }
 			| DROP DEFAULT				{ $$ = NULL; }
@@ -2896,6 +3098,26 @@ opt_collate_clause:
 					n->collname = $2;
 					n->location = @1;
 					$$ = (Node *) n;
+				}
+			| /* EMPTY */				{ $$ = NULL; }
+		;
+
+opt_column_pos:
+			FIRST_P 
+				{
+					ColumnPos *n = makeNode(ColumnPos);
+					n->is_first = true; 
+					n->location = @1;
+					$$ = (Node *) n;
+				}
+			| AFTER ColId
+				{
+					ColumnPos *n = makeNode(ColumnPos);
+					n->is_first = false;
+					n->based_colname = $2; 
+					n->location = @1;
+					$$ = (Node *) n;
+
 				}
 			| /* EMPTY */				{ $$ = NULL; }
 		;
@@ -3815,16 +4037,40 @@ ColConstraintElem:
 					n->indexspace = $4;
 					$$ = (Node *) n;
 				}
-			| PRIMARY KEY opt_definition OptConsTableSpace
+			| UNIQUE KEY opt_unique_null_treatment opt_definition OptConsTableSpace
 				{
 					Constraint *n = makeNode(Constraint);
 
+					n->contype = CONSTR_UNIQUE;
+					n->location = @1;
+					n->nulls_not_distinct = !$3;
+					n->keys = NULL;
+					n->options = $4;
+					n->indexname = NULL;
+					n->indexspace = $5;
+					$$ = (Node *) n;
+				}
+			| PRIMARY KEY opt_definition OptConsTableSpace
+				{
+					Constraint *n = makeNode(Constraint);
 					n->contype = CONSTR_PRIMARY;
 					n->location = @1;
 					n->keys = NULL;
 					n->options = $3;
 					n->indexname = NULL;
 					n->indexspace = $4;
+					$$ = (Node *) n;
+				}
+			| PRIMARY opt_definition OptConsTableSpace
+				{
+					Constraint *n = makeNode(Constraint);
+
+					n->contype = CONSTR_PRIMARY;
+					n->location = @1;
+					n->keys = NULL;
+					n->options = $2;
+					n->indexname = NULL;
+					n->indexspace = $3;
 					$$ = (Node *) n;
 				}
 			| CHECK '(' a_expr ')' opt_no_inherit
@@ -4705,6 +4951,10 @@ AlterSeqStmt:
 					$$ = (Node *) n;
 				}
 
+		;
+
+OptModifyIncrement: '=' NumericOnly					{ $$ = list_make1(makeDefElem("INCREMENT", (Node *)$2, @1));}
+			| /*EMPTY*/								{ $$ = NIL; }
 		;
 
 OptSeqOptList: SeqOptList							{ $$ = $1; }
@@ -14407,6 +14657,12 @@ a_expr:		c_expr									{ $$ = $1; }
 		 * If you add more explicitly-known operators, be sure to add them
 		 * also to b_expr and to the MathOp list below.
 		 */
+		 	| NOT_NOTEXC a_expr				%prec UMINUS
+				{ 
+					$$ = makeNotExpr_mys(makeNotExpr_mys($2, @1),@1); 
+				}
+			| NOT_LAEXC a_expr				%prec UMINUS
+				{ $$ = makeNotExpr_mys($2, @1); }
 			| '+' a_expr					%prec UMINUS
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "+", NULL, $2, @1); }
 			| '-' a_expr					%prec UMINUS
@@ -16653,7 +16909,6 @@ unreserved_keyword:
 			| ACTION
 			| ADD_P
 			| ADMIN
-			| AFTER
 			| AGGREGATE
 			| ALSO
 			| ALTER
@@ -16665,6 +16920,7 @@ unreserved_keyword:
 			| ATOMIC
 			| ATTACH
 			| ATTRIBUTE
+			| AUTO_INCREMENT
 			| BACKWARD
 			| BEFORE
 			| BEGIN_P
@@ -16741,7 +16997,6 @@ unreserved_keyword:
 			| FAMILY
 			| FILTER
 			| FINALIZE
-			| FIRST_P
 			| FOLLOWING
 			| FORCE
 			| FORWARD
@@ -16799,6 +17054,7 @@ unreserved_keyword:
 			| MINUTE_P
 			| MINVALUE
 			| MODE
+			| MODIFY
 			| MONTH_P
 			| MOVE
 			| NAME_P
@@ -17065,7 +17321,8 @@ type_func_name_keyword:
  * forced to.
  */
 reserved_keyword:
-			  ALL
+			AFTER
+			| ALL
 			| ANALYSE
 			| ANALYZE
 			| AND
@@ -17098,6 +17355,7 @@ reserved_keyword:
 			| EXCEPT
 			| FALSE_P
 			| FETCH
+			| FIRST_P
 			| FOR
 			| FOREIGN
 			| FROM
@@ -17180,6 +17438,7 @@ bare_label_keyword:
 			| ATTACH
 			| ATTRIBUTE
 			| AUTHORIZATION
+			| AUTO_INCREMENT
 			| BACKWARD
 			| BEFORE
 			| BEGIN_P
@@ -17368,6 +17627,7 @@ bare_label_keyword:
 			| METHOD
 			| MINVALUE
 			| MODE
+			| MODIFY
 			| MOVE
 			| NAME_P
 			| NAMES
@@ -18131,8 +18391,27 @@ makeOrExpr(Node *lexpr, Node *rexpr, int location)
 
 static Node *
 makeNotExpr(Node *expr, int location)
-{
+{	
 	return (Node *) makeBoolExpr(NOT_EXPR, list_make1(expr), location);
+}
+
+static Node *
+makeNotExpr_mys(Node *expr, int location)
+{	
+	//目前不能正确解析输入为 “ ” 的表达式
+	if (expr == NULL)
+	{
+		return (Node *) makeBoolExpr(NOT_EXPR, list_make1(expr), location);//返回一个空的表达式
+	}
+	//如果接受的参数不是boolean类型，我需要强制转换为boolean类型
+	if (!IsA(expr, BoolExpr))
+	{
+		expr = (Node *) makeTypeCast(expr, SystemTypeName("bool"), -1);
+	}
+	BoolExpr * n = (BoolExpr *)makeBoolExpr(NOT_EXPR, list_make1(expr), location);
+	
+	// return (Node *) makeBoolExpr(NOT_EXPR, list_make1(expr), location);
+	return (Node *) n;
 }
 
 static Node *

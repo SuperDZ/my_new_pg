@@ -1459,6 +1459,7 @@ _copyVar(const Var *from)
 	COPY_SCALAR_FIELD(varnosyn);
 	COPY_SCALAR_FIELD(varattnosyn);
 	COPY_LOCATION_FIELD(location);
+	COPY_SCALAR_FIELD(varattpos);
 
 	return newnode;
 }
@@ -2756,6 +2757,18 @@ _copyColumnRef(const ColumnRef *from)
 	return newnode;
 }
 
+static ColumnPos *
+_copyColumnPos(const ColumnPos *from)
+{
+	ColumnPos  *newnode = makeNode(ColumnPos);
+
+	COPY_STRING_FIELD(based_colname);
+	COPY_SCALAR_FIELD(is_first);
+	COPY_LOCATION_FIELD(location);
+
+	return newnode;
+}
+
 static ParamRef *
 _copyParamRef(const ParamRef *from)
 {
@@ -3089,7 +3102,8 @@ _copyColumnDef(const ColumnDef *from)
 	COPY_NODE_FIELD(constraints);
 	COPY_NODE_FIELD(fdwoptions);
 	COPY_LOCATION_FIELD(location);
-
+	COPY_STRING_FIELD(comment);
+	COPY_NODE_FIELD(colposition);
 	return newnode;
 }
 
@@ -3412,7 +3426,7 @@ _copyAlterTableCmd(const AlterTableCmd *from)
 	COPY_SCALAR_FIELD(behavior);
 	COPY_SCALAR_FIELD(missing_ok);
 	COPY_SCALAR_FIELD(recurse);
-
+	COPY_NODE_FIELD(comment);
 	return newnode;
 }
 
@@ -3666,7 +3680,10 @@ _copyCommentStmt(const CommentStmt *from)
 
 	COPY_SCALAR_FIELD(objtype);
 	COPY_NODE_FIELD(object);
-	COPY_STRING_FIELD(comment);
+	if (from->comment)
+		COPY_STRING_FIELD(comment);
+	else
+		newnode->comment = NULL;
 
 	return newnode;
 }
@@ -5845,6 +5862,9 @@ copyObjectImpl(const void *from)
 			break;
 		case T_ColumnRef:
 			retval = _copyColumnRef(from);
+			break;
+		case T_ColumnPos:
+			retval = _copyColumnPos(from);
 			break;
 		case T_ParamRef:
 			retval = _copyParamRef(from);

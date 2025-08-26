@@ -760,6 +760,7 @@ InsertPgAttributeTuples(Relation pg_attribute_rel,
 		slot[slotCount]->tts_isnull[Anum_pg_attribute_attacl - 1] = true;
 		slot[slotCount]->tts_isnull[Anum_pg_attribute_attfdwoptions - 1] = true;
 		slot[slotCount]->tts_isnull[Anum_pg_attribute_attmissingval - 1] = true;
+		slot[slotCount]->tts_values[Anum_pg_attribute_attpos - 1] = Int16GetDatum(attrs->attpos);
 
 		ExecStoreVirtualTuple(slot[slotCount]);
 		slotCount++;

@@ -1026,7 +1026,8 @@ checkInsertTargets(ParseState *pstate, List *cols, List **attrnos)
 			ResTarget  *col;
 			Form_pg_attribute attr;
 
-			attr = TupleDescAttr(pstate->p_target_relation->rd_att, i);
+			// attr = TupleDescAttr(pstate->p_target_relation->rd_att, i);
+			attr = TupleDescAttrAtPos(pstate->p_target_relation->rd_att, i);
 
 			if (attr->attisdropped)
 				continue;
@@ -1037,7 +1038,8 @@ checkInsertTargets(ParseState *pstate, List *cols, List **attrnos)
 			col->val = NULL;
 			col->location = -1;
 			cols = lappend(cols, col);
-			*attrnos = lappend_int(*attrnos, i + 1);
+			// *attrnos = lappend_int(*attrnos, i + 1);
+			*attrnos = lappend_int(*attrnos, attr->attnum);
 		}
 	}
 	else

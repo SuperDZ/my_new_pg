@@ -2451,6 +2451,17 @@ _equalColumnRef(const ColumnRef *a, const ColumnRef *b)
 }
 
 static bool
+_equalColumnPos(const ColumnPos *a, const ColumnPos *b)
+{
+	COMPARE_STRING_FIELD(based_colname);
+	COMPARE_SCALAR_FIELD(is_first);
+	COMPARE_LOCATION_FIELD(location);
+
+	return true;
+}
+
+
+static bool
 _equalParamRef(const ParamRef *a, const ParamRef *b)
 {
 	COMPARE_SCALAR_FIELD(number);
@@ -2719,6 +2730,8 @@ _equalColumnDef(const ColumnDef *a, const ColumnDef *b)
 	COMPARE_NODE_FIELD(constraints);
 	COMPARE_NODE_FIELD(fdwoptions);
 	COMPARE_LOCATION_FIELD(location);
+
+	COMPARE_NODE_FIELD(colposition);
 
 	return true;
 }
@@ -3830,6 +3843,10 @@ equal(const void *a, const void *b)
 		case T_ColumnRef:
 			retval = _equalColumnRef(a, b);
 			break;
+		
+		case T_ColumnPos:
+			retval = _equalColumnPos(a, b);
+
 		case T_ParamRef:
 			retval = _equalParamRef(a, b);
 			break;

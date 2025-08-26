@@ -120,6 +120,8 @@ const uint16 ScanKeywordTokens[] = {
 #define POP_YYLLOC()	(*(yylloc) = yyextra->save_yylloc)
 
 #define startlit()	( yyextra->literallen = 0 )
+extern bool mysql_mode;
+
 static void addlit(char *ytext, int yleng, core_yyscan_t yyscanner);
 static void addlitchar(unsigned char ychar, core_yyscan_t yyscanner);
 static char *litbufdup(core_yyscan_t yyscanner);
@@ -378,6 +380,7 @@ not_equals		"!="
 self			[,()\[\].;\:\+\-\*\/\%\^\<\>\=]
 op_chars		[\~\!\@\#\^\&\|\`\?\+\-\*\/\%\<\>\=]
 operator		{op_chars}+
+multi_not		[!]+{space}*
 
 /*
  * Numbers
@@ -823,6 +826,58 @@ other			.
 					return TYPECAST;
 				}
 
+{multi_not} 	{
+					int len = yyleng;
+					SET_YYLLOC();
+
+					if (!mysql_mode) {
+						/* 非兼容模式下，直接按第一个空格切分 */
+						yylval->str = pstrdup(strtok(yytext, " "));
+						return Op;
+					}
+
+					int count_exclamation_all = 0;
+					int count_exclamation_continuous = 0;
+					bool count_not = false;
+					/* flag=0 时，表示感叹号之间没有空格的场景，直接根据感叹号的数量进行逻辑判断即可
+						flag=1 时，表示感叹号之间存在空格，需要分别将连续感叹号的判断处理后再进行NOT的数量逻辑判断*/
+					bool flag = false;
+
+					for(int i = 0; i < len; i++)
+					{
+						if(yytext[i] == '!')
+						{
+							if(i > 0 && yytext[i-1] == ' ')
+							{
+								count_exclamation_continuous = 0;
+							}
+							count_exclamation_all++;
+							count_exclamation_continuous++;
+						}
+
+						else if(yytext[i] == ' ' && yytext[i-1] == '!')
+						{
+							flag = true;
+							if((count_exclamation_continuous % 4 == 1) || (count_exclamation_continuous % 4 == 2))
+							{
+								count_not ^= true; 
+							}
+						}
+					}
+
+					if(!flag)
+					{
+						if((count_exclamation_all % 4 == 1) || (count_exclamation_all % 4 == 2))
+						{
+							return (NOT_LAEXC);
+						}
+						return (NOT_NOTEXC);
+					}
+
+					return count_not ? NOT_LAEXC : NOT_NOTEXC;
+				}
+
+
 {dot_dot}		{
 					SET_YYLLOC();
 					return DOT_DOT;
@@ -875,6 +930,7 @@ other			.
 					int			nchars = yyleng;
 					char	   *slashstar = strstr(yytext, "/*");
 					char	   *dashdash = strstr(yytext, "--");
+					int			excla_count = 1;
 
 					if (slashstar && dashdash)
 					{
@@ -897,17 +953,17 @@ other			.
 					 */
 					if (nchars > 1 &&
 						(yytext[nchars - 1] == '+' ||
-						 yytext[nchars - 1] == '-'))
+						 yytext[nchars - 1] == '-' ||
+						 yytext[nchars - 1] == '!'))
 					{
 						int			ic;
 
 						for (ic = nchars - 2; ic >= 0; ic--)
 						{
 							char c = yytext[ic];
-							if (c == '~' || c == '!' || c == '@' ||
+							if (c == '~' || c == '@' || c == '%' ||
 								c == '#' || c == '^' || c == '&' ||
-								c == '|' || c == '`' || c == '?' ||
-								c == '%')
+								c == '|' || c == '`' || c == '?' )
 								break;
 						}
 						if (ic < 0)
@@ -916,11 +972,23 @@ other			.
 							 * didn't find a qualifying character, so remove
 							 * all trailing [+-]
 							 */
+							if (yytext[0] == '!')
+							{
+								for (int i = 1; i < nchars; i++)
+								{
+									if (yytext[i] != '!')
+									{
+										break;
+									}
+									excla_count++;
+								}
+							}
 							do {
 								nchars--;
 							} while (nchars > 1 &&
 								 (yytext[nchars - 1] == '+' ||
-								  yytext[nchars - 1] == '-'));
+								  yytext[nchars - 1] == '-' ||
+								  yytext[nchars - 1] == '!'));
 						}
 					}
 
@@ -929,7 +997,7 @@ other			.
 					if (nchars < yyleng)
 					{
 						/* Strip the unwanted chars from the token */
-						yyless(nchars);
+						yyless(nchars + excla_count - 1);
 						/*
 						 * If what we have left is only one char, and it's
 						 * one of the characters matching "self", then
@@ -937,8 +1005,20 @@ other			.
 						 * that the "self" rule would have.
 						 */
 						if (nchars == 1 &&
-							strchr(",()[].;:+-*/%^<>=", yytext[0]))
-							return yytext[0];
+							strchr(",()[].;:+-!*/%^<>=", yytext[0]))
+						{
+							if (yytext[0] == '!')
+							{
+								if((excla_count % 4 == 1) || (excla_count % 4 == 2))
+								{
+									return NOT_LAEXC;
+								}
+								else
+									return NOT_NOTEXC;
+							}
+							return yytext[0];					
+						}
+
 						/*
 						 * Likewise, if what we have left is two chars, and
 						 * those match the tokens ">=", "<=", "=>", "<>" or

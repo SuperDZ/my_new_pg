@@ -1022,8 +1022,10 @@ transformTableLikeClause(CreateStmtContext *cxt, TableLikeClause *table_like_cla
 	for (parent_attno = 1; parent_attno <= tupleDesc->natts;
 		 parent_attno++)
 	{
-		Form_pg_attribute attribute = TupleDescAttr(tupleDesc,
-													parent_attno - 1);
+		// Form_pg_attribute attribute = TupleDescAttr(tupleDesc,
+		// 											parent_attno - 1);
+		Form_pg_attribute attribute = TupleDescAttrAtPos(tupleDesc,
+			parent_attno - 1);
 		char	   *attributeName = NameStr(attribute->attname);
 		ColumnDef  *def;
 
@@ -3554,7 +3556,21 @@ transformAlterTableStmt(Oid relid, AlterTableStmt *stmt,
 
 				newcmds = lappend(newcmds, cmd);
 				break;
+				case AT_AlterComment:
+				switch(cmd->comment->objtype)
+				{
+					case OBJECT_COLUMN:
+						cmd->comment->object = (Node *)lcons(makeString(stmt->relation->relname), (List *)cmd->comment->object);
+						break;
+					case OBJECT_TABLE:
+						cmd->comment->object = (Node *)list_make1(makeString(stmt->relation->relname));
+						break;
+					default:
+						break;
+				}
 
+				newcmds = lappend(newcmds, cmd);
+				break;
 			default:
 
 				/*

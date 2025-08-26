@@ -259,7 +259,7 @@ CREATE VIEW pg_stats_ext WITH (security_barrier) AS
            sn.nspname AS statistics_schemaname,
            s.stxname AS statistics_name,
            pg_get_userbyid(s.stxowner) AS statistics_owner,
-           ( SELECT array_agg(a.attname ORDER BY a.attnum)
+           ( SELECT array_agg(a.attname ORDER BY a.attpos)
              FROM unnest(s.stxkeys) k
                   JOIN pg_attribute a
                        ON (a.attrelid = s.stxrelid AND a.attnum = k)

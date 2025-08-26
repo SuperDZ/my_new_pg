@@ -571,19 +571,31 @@ RelationBuildTupleDesc(Relation relation)
 	while (HeapTupleIsValid(pg_attribute_tuple = systable_getnext(pg_attribute_scan)))
 	{
 		Form_pg_attribute attp;
-		int			attnum;
+		int			attnum, attpos;
 
 		attp = (Form_pg_attribute) GETSTRUCT(pg_attribute_tuple);
 
 		attnum = attp->attnum;
+		attpos = attp->attpos;
+
 		if (attnum <= 0 || attnum > RelationGetNumberOfAttributes(relation))
 			elog(ERROR, "invalid attribute number %d for relation \"%s\"",
 				 attp->attnum, RelationGetRelationName(relation));
-
+		
+		if (attpos <= 0 || attpos > RelationGetNumberOfAttributes(relation))
+			elog(ERROR, "invalid attribute position %d for %s",
+				attp->attpos, RelationGetRelationName(relation));
+	 
 		memcpy(TupleDescAttr(relation->rd_att, attnum - 1),
 			   attp,
 			   ATTRIBUTE_FIXED_PART_SIZE);
 
+		Assert(relation->rd_att->attposmap != NULL);
+		if (enable_mysql_attpos)
+			relation->rd_att->attposmap[attpos - 1] = attnum - 1;
+		else
+			relation->rd_att->attposmap[attnum - 1] = attnum - 1;
+	   
 		/* Update constraint/default info */
 		if (attp->attnotnull)
 			constr->has_not_null = true;

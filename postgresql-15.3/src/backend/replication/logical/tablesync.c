@@ -858,11 +858,13 @@ fetch_remote_table_info(char *nspname, char *relname,
 					 " WHERE a.attnum > 0::pg_catalog.int2"
 					 "   AND NOT a.attisdropped %s"
 					 "   AND a.attrelid = %u"
-					 " ORDER BY a.attnum",
+					//  " ORDER BY a.attnum",
+					" ORDER BY a.%s",
 					 lrel->remoteid,
 					 (walrcv_server_version(LogRepWorkerWalRcvConn) >= 120000 ?
 					  "AND a.attgenerated = ''" : ""),
-					 lrel->remoteid);
+					 lrel->remoteid,
+					 enable_mysql_attpos ? "attpos" : "attnum");
 	res = walrcv_exec(LogRepWorkerWalRcvConn, cmd.data,
 					  lengthof(attrRow), attrRow);
 
