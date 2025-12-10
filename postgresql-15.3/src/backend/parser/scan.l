@@ -67,6 +67,8 @@ int			backslash_quote = BACKSLASH_QUOTE_SAFE_ENCODING;
 bool		escape_string_warning = true;
 bool		standard_conforming_strings = true;
 
+bool		mysql_mode = true;
+
 /*
  * Constant data exported from this file.  This array maps from the
  * zero-based keyword numbers returned by ScanKeywordLookup to the
@@ -826,56 +828,29 @@ other			.
 					return TYPECAST;
 				}
 
-{multi_not} 	{
-					int len = yyleng;
-					SET_YYLLOC();
+{multi_not}     {
+                                        int len = yyleng;
+                                        int bang_count = 0;
+                                        SET_YYLLOC();
 
-					if (!mysql_mode) {
-						/* 非兼容模式下，直接按第一个空格切分 */
-						yylval->str = pstrdup(strtok(yytext, " "));
-						return Op;
-					}
+                                        while (bang_count < len && yytext[bang_count] == '!')
+                                                bang_count++;
 
-					int count_exclamation_all = 0;
-					int count_exclamation_continuous = 0;
-					bool count_not = false;
-					/* flag=0 时，表示感叹号之间没有空格的场景，直接根据感叹号的数量进行逻辑判断即可
-						flag=1 时，表示感叹号之间存在空格，需要分别将连续感叹号的判断处理后再进行NOT的数量逻辑判断*/
-					bool flag = false;
+                                        if (!mysql_mode) {
+                                                yylval->str = pnstrdup(yytext, bang_count);
+                                                return Op;
+                                        }
 
-					for(int i = 0; i < len; i++)
-					{
-						if(yytext[i] == '!')
-						{
-							if(i > 0 && yytext[i-1] == ' ')
-							{
-								count_exclamation_continuous = 0;
-							}
-							count_exclamation_all++;
-							count_exclamation_continuous++;
-						}
+                                        /*
+                                         * MySQL treats repeated '!' as repeated logical-NOT.  Any even number
+                                         * of occurrences collapses to a double-NOT that only coerces the
+                                         * value to boolean, while an odd count keeps a single NOT.
+                                         */
+                                        if ((bang_count % 2) == 0)
+                                                return NOT_NOTEXC;
 
-						else if(yytext[i] == ' ' && yytext[i-1] == '!')
-						{
-							flag = true;
-							if((count_exclamation_continuous % 4 == 1) || (count_exclamation_continuous % 4 == 2))
-							{
-								count_not ^= true; 
-							}
-						}
-					}
-
-					if(!flag)
-					{
-						if((count_exclamation_all % 4 == 1) || (count_exclamation_all % 4 == 2))
-						{
-							return (NOT_LAEXC);
-						}
-						return (NOT_NOTEXC);
-					}
-
-					return count_not ? NOT_LAEXC : NOT_NOTEXC;
-				}
+                                        return NOT_LAEXC;
+                                }
 
 
 {dot_dot}		{
