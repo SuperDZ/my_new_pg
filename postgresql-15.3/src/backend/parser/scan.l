@@ -121,6 +121,7 @@ const uint16 ScanKeywordTokens[] = {
 
 #define startlit()	( yyextra->literallen = 0 )
 extern bool mysql_mode;
+extern int sql_mode;
 
 static void addlit(char *ytext, int yleng, core_yyscan_t yyscanner);
 static void addlitchar(unsigned char ychar, core_yyscan_t yyscanner);
@@ -827,16 +828,16 @@ other			.
 				}
 
 {multi_not} 	{
-					int len = yyleng;
-					SET_YYLLOC();
+                                        int len = yyleng;
+                                        SET_YYLLOC();
 
-					if (!mysql_mode) {
-						/* 非兼容模式下，直接按第一个空格切分 */
-						yylval->str = pstrdup(strtok(yytext, " "));
-						return Op;
-					}
+                                        if (!mysql_mode) {
+                                                /* 非兼容模式下，直接按第一个空格切分 */
+                                                yylval->str = pstrdup(strtok(yytext, " "));
+                                                return Op;
+                                        }
 
-					int count_exclamation_all = 0;
+                                        int count_exclamation_all = 0;
 					int count_exclamation_continuous = 0;
 					bool count_not = false;
 					/* flag=0 时，表示感叹号之间没有空格的场景，直接根据感叹号的数量进行逻辑判断即可
@@ -1034,15 +1035,18 @@ other			.
 							if (yytext[0] == '<' && yytext[1] == '=')
 								return LESS_EQUALS;
 							if (yytext[0] == '<' && yytext[1] == '>')
-								return NOT_EQUALS;
+									return NOT_EQUALS;
 							if (yytext[0] == '!' && yytext[1] == '=')
-								return NOT_EQUALS;
+									return NOT_EQUALS;
 							if (mysql_mode && yytext[0] == '&' && yytext[1] == '&')
-								return LOGICAL_AND;
-							if (mysql_mode && yytext[0] == '|' && yytext[1] == '|')
-								return LOGICAL_OR;
-						}
-					}
+									return LOGICAL_AND;
+                                                       if (mysql_mode && yytext[0] == '|' && yytext[1] == '|')
+                                                       {
+                                                                if (sql_mode != SQL_MODE_PIPES_AS_CONCAT)
+                                                                        return LOGICAL_OR;
+                                                       }
+                                                }
+                                        }
 
 					/*
 					 * Complain if operator is too long.  Unlike the case

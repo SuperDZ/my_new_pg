@@ -52,10 +52,19 @@ typedef enum
 	BACKSLASH_QUOTE_SAFE_ENCODING
 }			BackslashQuoteType;
 
+/* Values for sql_mode */
+typedef enum
+{
+	SQL_MODE_DEFAULT_MODE = 0,
+	SQL_MODE_PIPES_AS_CONCAT
+}			SqlModeType;
+
 /* GUC variables in scan.l (every one of these is a bad idea :-() */
 extern PGDLLIMPORT int backslash_quote;
 extern PGDLLIMPORT bool escape_string_warning;
 extern PGDLLIMPORT bool standard_conforming_strings;
+extern PGDLLIMPORT bool mysql_mode;
+extern PGDLLIMPORT int sql_mode;
 
 
 /* Primary entry point for the raw parsing functions */
