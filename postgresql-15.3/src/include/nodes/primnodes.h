@@ -41,6 +41,7 @@ typedef struct Alias
 	NodeTag		type;
 	char	   *aliasname;		/* aliased rel name (never qualified) */
 	List	   *colnames;		/* optional list of column aliases */
+	List	   *attnums;
 } Alias;
 
 /* What to do at commit time for temporary relations */
@@ -198,6 +199,7 @@ typedef struct Var
 								 * levels up */
 	Index		varnosyn;		/* syntactic relation index (0 if unknown) */
 	AttrNumber	varattnosyn;	/* syntactic attribute number */
+	AttrNumber	varattpos;	
 	int			location;		/* token location, or -1 if unknown */
 } Var;
 

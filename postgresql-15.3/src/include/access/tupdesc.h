@@ -81,6 +81,7 @@ typedef struct TupleDescData
 	int			natts;			/* number of attributes in the tuple */
 	Oid			tdtypeid;		/* composite type ID for tuple type */
 	int32		tdtypmod;		/* typmod for tuple type */
+	int16		*attposmap;
 	int			tdrefcount;		/* reference count, or -1 if not counting */
 	TupleConstr *constr;		/* constraints, or NULL if none */
 	/* attrs[N] is the description of Attribute Number N+1 */
@@ -90,6 +91,14 @@ typedef struct TupleDescData *TupleDesc;
 
 /* Accessor for the i'th attribute of tupdesc. */
 #define TupleDescAttr(tupdesc, i) (&(tupdesc)->attrs[(i)])
+
+extern PGDLLIMPORT bool enable_mysql_attpos;
+/* Accessor for the i'th attribute of tupdesc based on logical order.*/
+#define TupleDescAttrAtPos(tupdesc, i) \
+		(((tupdesc)->attposmap == NULL  || !enable_mysql_attpos) ? \
+		(&(tupdesc)->attrs[(i)]) : (&(tupdesc)->attrs[(tupdesc)->attposmap[(i)]]))
+
+
 
 extern TupleDesc CreateTemplateTupleDesc(int natts);
 

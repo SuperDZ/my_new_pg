@@ -87,6 +87,7 @@ CATALOG(pg_attribute,1249,AttributeRelationId) BKI_BOOTSTRAP BKI_ROWTYPE_OID(75,
 	 * otherwise zero.
 	 */
 	int32		attndims;
+	int16		attpos;
 
 	/*
 	 * fastgetattr() uses attcacheoff to cache byte offsets of attributes in

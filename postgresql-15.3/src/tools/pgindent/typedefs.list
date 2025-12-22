@@ -403,6 +403,7 @@ ColorTrgmInfo
 ColumnCompareData
 ColumnDef
 ColumnIOData
+ColumnPos
 ColumnRef
 ColumnsHashData
 CombinationGenerator

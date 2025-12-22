@@ -134,6 +134,9 @@
  */
 #define REALTYPE_PRECISION 17
 
+
+bool		enable_mysql_attpos = false;
+
 /* XXX these should appear in other modules' header files */
 extern bool Log_disconnections;
 extern int	CommitDelay;
@@ -1010,8 +1013,31 @@ static const unit_conversion time_unit_conversion_table[] =
 
 /******** option records follow ********/
 
+bool mysql_mode = false;
+
 static struct config_bool ConfigureNamesBool[] =
 {
+	//test guc para 3
+	{
+		{"mysql_mode", PGC_USERSET, QUERY_TUNING_METHOD,
+			gettext_noop("switch to mysql_mode."),
+			NULL
+		},
+		&mysql_mode,
+		false,
+		NULL, NULL, NULL
+	},
+	{
+		{"enable_mysql_attpos", PGC_POSTMASTER, COMPAT_OPTIONS_CLIENT,
+			gettext_noop("Whether to use the feature of MySQL FIRST AFTER keywords"),
+			gettext_noop("When enabled, attributes are sorted by attpos;"
+						 "when disabled, attributes are sorted by attnum"),
+			GUC_REPORT | GUC_NO_RESET_ALL | GUC_DISALLOW_IN_AUTO_FILE
+		},
+		&enable_mysql_attpos,
+		false,
+		NULL, NULL, NULL
+	},
 	{
 		{"enable_seqscan", PGC_USERSET, QUERY_TUNING_METHOD,
 			gettext_noop("Enables the planner's use of sequential-scan plans."),

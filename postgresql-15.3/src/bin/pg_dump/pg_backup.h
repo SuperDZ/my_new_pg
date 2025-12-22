@@ -213,6 +213,7 @@ typedef struct Archive
 	char	   *remoteVersionStr;	/* server's version string */
 	int			remoteVersion;	/* same in numeric form */
 	bool		isStandby;		/* is server a standby node */
+	bool		enable_mysql_attpos;
 
 	int			minRemoteVersion;	/* allowable range */
 	int			maxRemoteVersion;

@@ -655,6 +655,20 @@ typedef struct RangeTableSample
 } RangeTableSample;
 
 /*
+* ColumPos - the column position specified in an "alter table" command
+*
+* This node is a part of ColumnDef, but can only be used in the
+* "alter table " not "create table".(See gram.y)
+*/
+typedef struct ColumPos
+{
+   NodeTag		type;
+   char	   *based_colname;		/* AFTER which column */
+   bool		is_first;			/* using FIRST keyword or false if using AFTER */
+   int			location;
+} ColumnPos;
+
+/*
  * ColumnDef - column definition (used in various creates)
  *
  * If the column has a default value, we may have the value expression
@@ -694,6 +708,8 @@ typedef struct ColumnDef
 	List	   *constraints;	/* other constraints on column */
 	List	   *fdwoptions;		/* per-column FDW options */
 	int			location;		/* parse location, or -1 if none/unknown */
+	char	   *comment;		/* column comment */
+	Node	   *colposition;	
 } ColumnDef;
 
 /*
@@ -1915,6 +1931,15 @@ typedef enum DropBehavior
 	DROP_CASCADE				/* remove dependent objects too */
 } DropBehavior;
 
+typedef struct CommentStmt
+{
+    NodeTag     type;
+    ObjectType  objtype;        /* Object's type */
+    Node       *object;         /* Qualified name of the object */
+    char       *comment;        /* Comment to insert, or NULL to remove */
+} CommentStmt;
+
+
 /* ----------------------
  *	Alter Table
  * ----------------------
@@ -2000,6 +2025,7 @@ typedef enum AlterTableType
 	AT_AddIdentity,				/* ADD IDENTITY */
 	AT_SetIdentity,				/* SET identity column options */
 	AT_DropIdentity,			/* DROP IDENTITY */
+	AT_AlterComment,			/* ALTER COMMENT */
 	AT_ReAddStatistics			/* internal to commands/tablecmds.c */
 } AlterTableType;
 
@@ -2024,6 +2050,7 @@ typedef struct AlterTableCmd	/* one subcommand of an ALTER TABLE */
 	DropBehavior behavior;		/* RESTRICT or CASCADE for DROP cases */
 	bool		missing_ok;		/* skip error if missing? */
 	bool		recurse;		/* exec-time recursion */
+	CommentStmt	*comment;		/* Comment to apply */
 } AlterTableCmd;
 
 
@@ -2843,13 +2870,6 @@ typedef struct TruncateStmt
  *				Comment On Statement
  * ----------------------
  */
-typedef struct CommentStmt
-{
-	NodeTag		type;
-	ObjectType	objtype;		/* Object's type */
-	Node	   *object;			/* Qualified name of the object */
-	char	   *comment;		/* Comment to insert, or NULL to remove */
-} CommentStmt;
 
 /* ----------------------
  *				SECURITY LABEL Statement

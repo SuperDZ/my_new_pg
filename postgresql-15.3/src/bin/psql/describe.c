@@ -1535,6 +1535,8 @@ describeOneTableDetails(const char *schemaname,
 	char	   *headers[12];
 	PQExpBufferData title;
 	PQExpBufferData tmpbuf;
+	bool enable_attpos_front = false;
+
 	int			cols;
 	int			attname_col = -1,	/* column indexes in "res" */
 				atttype_col = -1,
@@ -1578,6 +1580,16 @@ describeOneTableDetails(const char *schemaname,
 	initPQExpBuffer(&buf);
 	initPQExpBuffer(&title);
 	initPQExpBuffer(&tmpbuf);
+	res = PSQLexec("show enable_mysql_attpos;");
+
+	if (PQntuples(res) == 1)
+	{
+		char	*res_str = PQgetvalue(res, 0, 0);
+		if(res_str && strcmp(res_str, "on") == 0)
+			enable_attpos_front = true;
+	}
+
+	PQclear(res);
 
 	/* Get general table info */
 	if (pset.sversion >= 120000)
@@ -1942,7 +1954,11 @@ describeOneTableDetails(const char *schemaname,
 
 	appendPQExpBufferStr(&buf, "\nFROM pg_catalog.pg_attribute a");
 	appendPQExpBuffer(&buf, "\nWHERE a.attrelid = '%s' AND a.attnum > 0 AND NOT a.attisdropped", oid);
-	appendPQExpBufferStr(&buf, "\nORDER BY a.attnum;");
+	// appendPQExpBufferStr(&buf, "\nORDER BY a.attnum;");
+	if (enable_attpos_front)
+		appendPQExpBufferStr(&buf, "\nORDER BY a.attpos;");
+	else
+		appendPQExpBufferStr(&buf, "\nORDER BY a.attnum;"); 
 
 	res = PSQLexec(buf.data);
 	if (!res)

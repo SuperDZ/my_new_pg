@@ -1004,3 +1004,324 @@
 2025-07-20 18:02:43.271 CST [123745] LOG:  redirecting log output to logging collector process
 2025-07-20 18:02:43.271 CST [123745] HINT:  Future log output will appear in directory "log".
 2025-07-21 10:31:38.025 CST [123751] DEBUG:  logger shutting down
+2025-09-16 15:46:19.851 CST [91838] DEBUG:  registering background worker "logical replication launcher"
+2025-09-16 15:46:19.861 CST [91838] DEBUG:  mmap(2220883968) with MAP_HUGETLB failed, huge pages disabled: 无法分配内存
+2025-09-16 15:46:19.933 CST [91838] DEBUG:  dynamic shared memory system will support 274 segments
+2025-09-16 15:46:19.934 CST [91838] DEBUG:  created dynamic shared memory control segment 2529513780 (10976 bytes)
+2025-09-16 15:46:19.935 CST [91838] DEBUG:  max_safe_fds = 987, usable_fds = 1000, already_open = 3
+2025-09-16 15:46:19.935 CST [91838] LOG:  redirecting log output to logging collector process
+2025-09-16 15:46:19.935 CST [91838] HINT:  Future log output will appear in directory "log".
+2025-09-16 15:47:54.837 CST [91839] DEBUG:  logger shutting down
+2025-09-16 16:28:30.538 CST [51906] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-09-16 16:28:30.541 CST [51906] LOG:  listening on IPv6 address "::1", port 5432
+2025-09-16 16:28:30.541 CST [51906] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-16 16:28:30.558 CST [51906] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-09-16 16:28:30.562 CST [51909] LOG:  database system was shut down at 2025-09-16 16:28:22 CST
+2025-09-16 16:28:30.566 CST [51906] LOG:  database system is ready to accept connections
+2025-09-16 16:28:33.110 CST [52134] FATAL:  database "postgresql" does not exist
+2025-09-16 16:28:55.831 CST [52410] ERROR:  syntax error at or near "createdb" at character 1
+2025-09-16 16:28:55.831 CST [52410] STATEMENT:  createdb -U postgres benchmarksql;
+2025-09-16 16:29:03.146 CST [54641] FATAL:  role "postgres" does not exist
+2025-09-16 16:29:03.150 CST [54644] FATAL:  role "postgres" does not exist
+2025-09-16 16:29:16.924 CST [55717] FATAL:  lock file "postmaster.pid" already exists
+2025-09-16 16:29:16.924 CST [55717] HINT:  Is another postmaster (PID 51906) running in data directory "/app/pgdata3"?
+2025-09-16 16:33:30.662 CST [51907] LOG:  checkpoint starting: time
+2025-09-16 16:35:07.326 CST [51907] LOG:  checkpoint complete: wrote 963 buffers (5.9%); 0 WAL file(s) added, 0 removed, 0 recycled; write=96.633 s, sync=0.002 s, total=96.665 s; sync files=259, longest=0.001 s, average=0.001 s; distance=4483 kB, estimate=4483 kB
+2025-09-16 16:35:41.288 CST [51906] LOG:  received fast shutdown request
+2025-09-16 16:35:41.289 CST [51906] LOG:  aborting any active transactions
+2025-09-16 16:35:41.290 CST [51906] LOG:  background worker "logical replication launcher" (PID 51912) exited with exit code 1
+2025-09-16 16:35:41.291 CST [51907] LOG:  shutting down
+2025-09-16 16:35:41.292 CST [51907] LOG:  checkpoint starting: shutdown immediate
+2025-09-16 16:35:41.301 CST [51907] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.010 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=4034 kB
+2025-09-16 16:35:41.309 CST [51906] LOG:  database system is shut down
+2025-12-10 15:06:19.053 CST [65991] DEBUG:  registering background worker "logical replication launcher"
+2025-12-10 15:06:19.056 CST [65991] DEBUG:  loaded library "auto_explain"
+2025-12-10 15:06:19.057 CST [65991] DEBUG:  mmap(2220883968) with MAP_HUGETLB failed, huge pages disabled: 无法分配内存
+2025-12-10 15:06:19.121 CST [65991] DEBUG:  dynamic shared memory system will support 274 segments
+2025-12-10 15:06:19.124 CST [65991] DEBUG:  created dynamic shared memory control segment 179285940 (10976 bytes)
+2025-12-10 15:06:19.125 CST [65991] DEBUG:  max_safe_fds = 987, usable_fds = 1000, already_open = 3
+2025-12-10 15:06:19.126 CST [65991] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 15:06:19.127 CST [65991] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-12-10 15:06:19.128 CST [65991] LOG:  listening on IPv6 address "::", port 5432
+2025-12-10 15:06:19.141 CST [65991] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-12-10 15:06:19.147 CST [65992] DEBUG:  checkpointer updated shared memory configuration values
+2025-12-10 15:06:19.148 CST [65994] LOG:  database system was shut down at 2025-12-10 15:06:18 CST
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  checkpoint record is at 2D/3E2A3EC0
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  redo record is at 2D/3E2A3EC0; shutdown true
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  next transaction ID: 2891053; next OID: 52633
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  next MultiXactId: 5623; next MultiXactOffset: 11617
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  oldest unfrozen transaction ID: 716, in database 5
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  oldest MultiXactId: 1, in database 5
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  commit timestamp Xid oldest/newest: 0/0
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  transaction ID wrap limit is 2147484363, limited by database with OID 5
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  MultiXactId wrap limit is 2147483648, limited by database with OID 5
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  starting up replication slots
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  xmin required by slots: data 0, catalog 0
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  starting up replication origin progress state
+2025-12-10 15:06:19.148 CST [65994] DEBUG:  reading stats file "pg_stat/pgstat.stat"
+2025-12-10 15:06:19.149 CST [65994] DEBUG:  removing permanent stats file "pg_stat/pgstat.stat"
+2025-12-10 15:06:19.149 CST [65994] DEBUG:  MultiXactId wrap limit is 2147483648, limited by database with OID 5
+2025-12-10 15:06:19.149 CST [65994] DEBUG:  oldest MultiXactId member is at offset 1
+2025-12-10 15:06:19.149 CST [65994] DEBUG:  MultiXact member stop limit is now 4294914944 based on MultiXact 1
+2025-12-10 15:06:19.150 CST [65991] DEBUG:  starting background worker process "logical replication launcher"
+2025-12-10 15:06:19.150 CST [65991] LOG:  database system is ready to accept connections
+2025-12-10 15:06:19.151 CST [65996] DEBUG:  autovacuum launcher started
+2025-12-10 15:06:19.152 CST [65997] DEBUG:  logical replication launcher started
+2025-12-10 15:06:29.202 CST [65991] DEBUG:  forked new backend, pid=66413 socket=8
+2025-12-10 15:06:29.203 CST [66413] LOG:  connection received: host=[local]
+2025-12-10 15:06:29.203 CST [66413] LOG:  connection authorized: user=postgresql database=postgres application_name=psql
+2025-12-10 15:06:34.203 CST [65993] DEBUG:  snapshot of 0+0 running transaction ids (lsn 2D/3E2A3F70 oldest xid 2891053 latest complete 2891052 next xid 2891053)
+2025-12-10 15:06:44.565 CST [66413] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:06:44.565 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:06:44.565 CST [66413] STATEMENT:  select 1 && 2;
+2025-12-10 15:07:09.759 CST [66413] ERROR:  operator does not exist: integer || integer at character 10
+2025-12-10 15:07:09.759 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:07:09.759 CST [66413] STATEMENT:  select 1 || 2;
+2025-12-10 15:07:19.217 CST [68559] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:07:19.219 CST [65991] DEBUG:  server process (PID 68559) exited with exit code 0
+2025-12-10 15:07:33.230 CST [66413] ERROR:  operator does not exist: integer || integer at character 10
+2025-12-10 15:07:33.230 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:07:33.230 CST [66413] STATEMENT:  select 1 || 0;
+2025-12-10 15:07:38.520 CST [66413] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:07:38.520 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:07:38.520 CST [66413] STATEMENT:  select 1 &&  0;
+2025-12-10 15:07:47.832 CST [66413] ERROR:  operator does not exist: boolean && boolean at character 13
+2025-12-10 15:07:47.832 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:07:47.832 CST [66413] STATEMENT:  select true && false;
+2025-12-10 15:07:54.192 CST [66413] ERROR:  column "t" does not exist at character 8
+2025-12-10 15:07:54.192 CST [66413] STATEMENT:  select t && f;
+2025-12-10 15:08:10.222 CST [66413] ERROR:  column "1==1" does not exist at character 8
+2025-12-10 15:08:10.222 CST [66413] STATEMENT:  select "1==1" && "2==2";
+2025-12-10 15:08:19.276 CST [71106] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:08:19.278 CST [65991] DEBUG:  server process (PID 71106) exited with exit code 0
+2025-12-10 15:08:20.487 CST [66413] ERROR:  operator does not exist: integer == integer at character 9
+2025-12-10 15:08:20.487 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:08:20.487 CST [66413] STATEMENT:  select 1==1 && 2==2;
+2025-12-10 15:08:29.135 CST [66413] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:08:29.135 CST [66413] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:08:29.135 CST [66413] STATEMENT:  select 1 && 2;
+2025-12-10 15:09:19.309 CST [73652] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:09:19.311 CST [65991] DEBUG:  server process (PID 73652) exited with exit code 0
+2025-12-10 15:10:19.358 CST [76183] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:10:19.359 CST [65991] DEBUG:  server process (PID 76183) exited with exit code 0
+2025-12-10 15:11:19.424 CST [78723] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:11:19.425 CST [65991] DEBUG:  server process (PID 78723) exited with exit code 0
+2025-12-10 15:12:19.481 CST [82769] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:12:19.482 CST [65991] DEBUG:  server process (PID 82769) exited with exit code 0
+2025-12-10 15:13:19.542 CST [87854] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:13:19.544 CST [65991] DEBUG:  server process (PID 87854) exited with exit code 0
+2025-12-10 15:14:19.600 CST [92858] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:14:19.601 CST [65991] DEBUG:  server process (PID 92858) exited with exit code 0
+2025-12-10 15:14:29.323 CST [66413] LOG:  disconnection: session time: 0:08:00.120 user=postgresql database=postgres host=[local]
+2025-12-10 15:14:29.324 CST [65991] DEBUG:  server process (PID 66413) exited with exit code 0
+2025-12-10 15:15:19.604 CST [97967] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:15:19.605 CST [65991] DEBUG:  server process (PID 97967) exited with exit code 0
+2025-12-10 15:16:19.663 CST [102965] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:16:19.665 CST [65991] DEBUG:  server process (PID 102965) exited with exit code 0
+2025-12-10 15:17:19.724 CST [108053] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:17:19.725 CST [65991] DEBUG:  server process (PID 108053) exited with exit code 0
+2025-12-10 15:18:19.741 CST [113095] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:18:19.743 CST [65991] DEBUG:  server process (PID 113095) exited with exit code 0
+2025-12-10 15:19:19.801 CST [118159] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:19:19.802 CST [65991] DEBUG:  server process (PID 118159) exited with exit code 0
+2025-12-10 15:20:19.830 CST [123248] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:20:19.833 CST [65991] DEBUG:  server process (PID 123248) exited with exit code 0
+2025-12-10 15:21:19.888 CST [128299] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:21:19.889 CST [65991] DEBUG:  server process (PID 128299) exited with exit code 0
+2025-12-10 15:22:04.052 CST [65991] DEBUG:  forked new backend, pid=1507 socket=8
+2025-12-10 15:22:04.053 CST [1507] LOG:  connection received: host=[local]
+2025-12-10 15:22:04.065 CST [1507] LOG:  connection authorized: user=postgresql database=postgres application_name=psql
+2025-12-10 15:22:19.925 CST [3124] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:22:19.926 CST [65991] DEBUG:  server process (PID 3124) exited with exit code 0
+2025-12-10 15:23:19.988 CST [8203] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:23:19.989 CST [65991] DEBUG:  server process (PID 8203) exited with exit code 0
+2025-12-10 15:24:19.998 CST [13250] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:24:19.999 CST [65991] DEBUG:  server process (PID 13250) exited with exit code 0
+2025-12-10 15:25:20.060 CST [18432] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:25:20.063 CST [65991] DEBUG:  server process (PID 18432) exited with exit code 0
+2025-12-10 15:26:20.113 CST [23534] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:26:20.114 CST [65991] DEBUG:  server process (PID 23534) exited with exit code 0
+2025-12-10 15:27:20.156 CST [28591] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:27:20.157 CST [65991] DEBUG:  server process (PID 28591) exited with exit code 0
+2025-12-10 15:28:20.217 CST [33622] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:28:20.219 CST [65991] DEBUG:  server process (PID 33622) exited with exit code 0
+2025-12-10 15:29:20.259 CST [38713] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:29:20.260 CST [65991] DEBUG:  server process (PID 38713) exited with exit code 0
+2025-12-10 15:30:20.320 CST [43772] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:30:20.321 CST [65991] DEBUG:  server process (PID 43772) exited with exit code 0
+2025-12-10 15:31:20.381 CST [48755] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:31:20.382 CST [65991] DEBUG:  server process (PID 48755) exited with exit code 0
+2025-12-10 15:32:20.440 CST [53910] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:32:20.441 CST [65991] DEBUG:  server process (PID 53910) exited with exit code 0
+2025-12-10 15:33:20.488 CST [58981] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:33:20.489 CST [65991] DEBUG:  server process (PID 58981) exited with exit code 0
+2025-12-10 15:34:20.510 CST [64054] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:34:20.512 CST [65991] DEBUG:  server process (PID 64054) exited with exit code 0
+2025-12-10 15:34:26.863 CST [1507] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:34:26.863 CST [1507] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:34:26.863 CST [1507] STATEMENT:  select 1 && 2;
+2025-12-10 15:35:20.570 CST [69143] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:35:20.572 CST [65991] DEBUG:  server process (PID 69143) exited with exit code 0
+2025-12-10 15:36:19.235 CST [65992] LOG:  checkpoint starting: time
+2025-12-10 15:36:19.235 CST [65992] DEBUG:  performing replication slot checkpoint
+2025-12-10 15:36:19.252 CST [65992] DEBUG:  checkpoint sync: number=1 file=pg_xact/0002 time=0.758 ms
+2025-12-10 15:36:19.252 CST [65992] DEBUG:  checkpoint sync: number=2 file=pg_multixact/offsets/0000 time=0.026 ms
+2025-12-10 15:36:19.252 CST [65992] DEBUG:  checkpoint sync: number=3 file=pg_multixact/members/0000 time=0.006 ms
+2025-12-10 15:36:19.253 CST [65992] DEBUG:  snapshot of 0+0 running transaction ids (lsn 2D/3E2A3FA8 oldest xid 2891053 latest complete 2891052 next xid 2891053)
+2025-12-10 15:36:19.254 CST [65992] DEBUG:  attempting to remove WAL segments older than log file 000000000000002D0000003D
+2025-12-10 15:36:19.254 CST [65992] DEBUG:  SlruScanDirectory invoking callback on pg_subtrans/002C
+2025-12-10 15:36:19.255 CST [65992] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.002 s, total=0.020 s; sync files=3, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2025-12-10 15:36:20.604 CST [74216] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:36:20.605 CST [65991] DEBUG:  server process (PID 74216) exited with exit code 0
+2025-12-10 15:36:22.328 CST [65993] DEBUG:  snapshot of 0+0 running transaction ids (lsn 2D/3E2A4070 oldest xid 2891053 latest complete 2891052 next xid 2891053)
+2025-12-10 15:37:20.615 CST [79137] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:37:20.617 CST [65991] DEBUG:  server process (PID 79137) exited with exit code 0
+2025-12-10 15:38:20.647 CST [84154] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:38:20.648 CST [65991] DEBUG:  server process (PID 84154) exited with exit code 0
+2025-12-10 15:39:20.686 CST [89228] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:39:20.688 CST [65991] DEBUG:  server process (PID 89228) exited with exit code 0
+2025-12-10 15:39:38.238 CST [1507] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:39:38.238 CST [1507] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:39:38.238 CST [1507] STATEMENT:  select 1 && 2;
+2025-12-10 15:39:41.777 CST [1507] LOG:  disconnection: session time: 0:17:37.724 user=postgresql database=postgres host=[local]
+2025-12-10 15:39:41.778 CST [65991] DEBUG:  server process (PID 1507) exited with exit code 0
+2025-12-10 15:40:20.743 CST [94252] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:40:20.743 CST [65991] DEBUG:  server process (PID 94252) exited with exit code 0
+2025-12-10 15:41:20.780 CST [99320] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:41:20.782 CST [65991] DEBUG:  server process (PID 99320) exited with exit code 0
+2025-12-10 15:42:20.828 CST [109060] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:42:20.830 CST [65991] DEBUG:  server process (PID 109060) exited with exit code 0
+2025-12-10 15:43:20.983 CST [120844] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:43:20.985 CST [65991] DEBUG:  server process (PID 120844) exited with exit code 0
+2025-12-10 15:44:20.954 CST [128445] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:44:20.957 CST [65991] DEBUG:  server process (PID 128445) exited with exit code 0
+2025-12-10 15:45:21.012 CST [3107] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:45:21.013 CST [65991] DEBUG:  server process (PID 3107) exited with exit code 0
+2025-12-10 15:46:21.073 CST [8955] DEBUG:  autovacuum: processing database "postgres"
+2025-12-10 15:46:21.074 CST [65991] DEBUG:  server process (PID 8955) exited with exit code 0
+2025-12-10 15:46:30.151 CST [9726] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 15:46:30.153 CST [9726] LOG:  could not bind IPv6 address "::1": 地址已在使用
+2025-12-10 15:46:30.153 CST [9726] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-12-10 15:46:30.153 CST [9726] LOG:  could not bind IPv4 address "127.0.0.1": 地址已在使用
+2025-12-10 15:46:30.153 CST [9726] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-12-10 15:46:30.153 CST [9726] WARNING:  could not create listen socket for "localhost"
+2025-12-10 15:46:30.153 CST [9726] FATAL:  could not create any TCP/IP sockets
+2025-12-10 15:46:30.155 CST [9726] LOG:  database system is shut down
+2025-12-10 15:46:42.339 CST [65991] DEBUG:  postmaster received signal 2
+2025-12-10 15:46:42.339 CST [65991] LOG:  received fast shutdown request
+2025-12-10 15:46:42.341 CST [65991] LOG:  aborting any active transactions
+2025-12-10 15:46:42.341 CST [65997] DEBUG:  logical replication launcher shutting down
+2025-12-10 15:46:42.342 CST [65996] DEBUG:  autovacuum launcher shutting down
+2025-12-10 15:46:42.342 CST [65991] LOG:  background worker "logical replication launcher" (PID 65997) exited with exit code 1
+2025-12-10 15:46:42.343 CST [65992] LOG:  shutting down
+2025-12-10 15:46:42.349 CST [65992] LOG:  checkpoint starting: shutdown immediate
+2025-12-10 15:46:42.349 CST [65992] DEBUG:  performing replication slot checkpoint
+2025-12-10 15:46:42.363 CST [65992] DEBUG:  attempting to remove WAL segments older than log file 000000000000002D0000003D
+2025-12-10 15:46:42.363 CST [65992] DEBUG:  SlruScanDirectory invoking callback on pg_subtrans/002C
+2025-12-10 15:46:42.363 CST [65992] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.001 s, total=0.020 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=0 kB
+2025-12-10 15:46:42.364 CST [65992] DEBUG:  writing stats file "pg_stat/pgstat.stat"
+2025-12-10 15:46:42.366 CST [65991] DEBUG:  cleaning up orphaned dynamic shared memory with ID 1206071612
+2025-12-10 15:46:42.366 CST [65991] DEBUG:  cleaning up dynamic shared memory control segment with ID 179285940
+2025-12-10 15:46:42.376 CST [65991] LOG:  database system is shut down
+2025-12-10 15:46:44.591 CST [10897] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 15:46:44.593 CST [10897] LOG:  listening on IPv6 address "::1", port 5432
+2025-12-10 15:46:44.593 CST [10897] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-12-10 15:46:44.600 CST [10897] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-12-10 15:46:44.608 CST [10914] LOG:  database system was shut down at 2025-12-10 15:46:23 CST
+2025-12-10 15:46:44.611 CST [10897] LOG:  database system is ready to accept connections
+2025-12-10 15:46:54.434 CST [11803] FATAL:  database "postgresql" does not exist
+2025-12-10 15:46:59.006 CST [12133] FATAL:  database "postgresql" does not exist
+2025-12-10 15:47:14.971 CST [12295] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:47:14.971 CST [12295] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:47:14.971 CST [12295] STATEMENT:  select 1 && 2;
+2025-12-10 15:49:07.783 CST [12295] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:49:07.783 CST [12295] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:49:07.783 CST [12295] STATEMENT:  select 1 && 2;
+2025-12-10 15:49:14.707 CST [10916] WARNING:  autovacuum worker took too long to start; canceled
+2025-12-10 15:49:49.611 CST [12295] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:49:49.611 CST [12295] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:49:49.611 CST [12295] STATEMENT:  select 1 && 2;
+2025-12-10 15:50:44.767 CST [10916] WARNING:  autovacuum worker took too long to start; canceled
+2025-12-10 15:50:56.138 CST [12295] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:50:56.138 CST [12295] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:50:56.138 CST [12295] STATEMENT:  select 1 && 2;
+2025-12-10 15:51:26.886 CST [12295] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:51:26.886 CST [12295] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:51:26.886 CST [12295] STATEMENT:  select 1 && 2;
+2025-12-10 15:51:44.707 CST [10912] LOG:  checkpoint starting: time
+2025-12-10 15:51:44.718 CST [10912] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.011 s; sync files=2, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2025-12-10 15:51:44.796 CST [10916] WARNING:  autovacuum worker took too long to start; canceled
+2025-12-10 15:51:45.089 CST [10897] LOG:  received fast shutdown request
+2025-12-10 15:51:45.091 CST [10897] LOG:  aborting any active transactions
+2025-12-10 15:51:45.092 CST [10897] LOG:  background worker "logical replication launcher" (PID 10917) exited with exit code 1
+2025-12-10 15:51:45.092 CST [36326] FATAL:  terminating autovacuum process due to administrator command
+2025-12-10 15:51:45.093 CST [10912] LOG:  shutting down
+2025-12-10 15:51:45.095 CST [10912] LOG:  checkpoint starting: shutdown immediate
+2025-12-10 15:51:45.100 CST [10912] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.007 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=0 kB
+2025-12-10 15:51:45.105 CST [10897] LOG:  database system is shut down
+2025-12-10 15:51:45.166 CST [36327] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 15:51:45.168 CST [36327] LOG:  listening on IPv6 address "::1", port 5432
+2025-12-10 15:51:45.168 CST [36327] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-12-10 15:51:45.180 CST [36327] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-12-10 15:51:45.184 CST [36330] LOG:  database system was shut down at 2025-12-10 15:51:45 CST
+2025-12-10 15:51:45.189 CST [36327] LOG:  database system is ready to accept connections
+2025-12-10 15:52:30.218 CST [36832] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 15:52:30.218 CST [36832] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 15:52:30.218 CST [36832] STATEMENT:  select 1 && 2;
+2025-12-10 15:56:45.286 CST [36328] LOG:  checkpoint starting: time
+2025-12-10 15:56:48.527 CST [36328] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.223 s, sync=0.002 s, total=3.242 s; sync files=10, longest=0.001 s, average=0.001 s; distance=163 kB, estimate=163 kB
+2025-12-10 16:00:14.099 CST [36832] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 16:00:14.099 CST [36832] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 16:00:14.099 CST [36832] STATEMENT:  select 1 && 2;
+2025-12-10 16:08:34.446 CST [36327] LOG:  received fast shutdown request
+2025-12-10 16:08:34.451 CST [36327] LOG:  aborting any active transactions
+2025-12-10 16:08:34.452 CST [36327] LOG:  background worker "logical replication launcher" (PID 36333) exited with exit code 1
+2025-12-10 16:08:34.452 CST [36328] LOG:  shutting down
+2025-12-10 16:08:34.454 CST [36328] LOG:  checkpoint starting: shutdown immediate
+2025-12-10 16:08:34.460 CST [36328] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.008 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=147 kB
+2025-12-10 16:08:34.465 CST [36327] LOG:  database system is shut down
+/bin/sh: /app/postgresql-15.10/opt/pgsql/bin/postgres: 无法执行二进制文件
+/bin/sh: /app/postgresql-15.10/opt/pgsql/bin/postgres: 成功
+2025-12-10 16:16:49.970 CST [41283] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 16:16:49.972 CST [41283] LOG:  listening on IPv6 address "::1", port 5432
+2025-12-10 16:16:49.972 CST [41283] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-12-10 16:16:49.975 CST [41283] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-12-10 16:16:49.993 CST [41286] LOG:  database system was shut down at 2025-12-10 16:08:34 CST
+2025-12-10 16:16:49.999 CST [41283] LOG:  database system is ready to accept connections
+2025-12-10 16:17:11.105 CST [42113] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 16:17:11.105 CST [42113] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 16:17:11.105 CST [42113] STATEMENT:  select 1 && 2;
+2025-12-10 16:21:50.093 CST [41284] LOG:  checkpoint starting: time
+2025-12-10 16:21:50.103 CST [41284] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.002 s, total=0.010 s; sync files=2, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2025-12-10 16:23:09.259 CST [41283] LOG:  received fast shutdown request
+2025-12-10 16:23:09.262 CST [41283] LOG:  aborting any active transactions
+2025-12-10 16:23:09.263 CST [41283] LOG:  background worker "logical replication launcher" (PID 41289) exited with exit code 1
+2025-12-10 16:23:09.264 CST [41284] LOG:  shutting down
+2025-12-10 16:23:09.265 CST [41284] LOG:  checkpoint starting: shutdown immediate
+2025-12-10 16:23:09.268 CST [41284] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=0 kB
+2025-12-10 16:23:09.273 CST [41283] LOG:  database system is shut down
+2025-12-10 16:23:09.388 CST [73830] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 16:23:09.390 CST [73830] LOG:  listening on IPv6 address "::1", port 5432
+2025-12-10 16:23:09.390 CST [73830] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-12-10 16:23:09.395 CST [73830] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-12-10 16:23:09.400 CST [73853] LOG:  database system was shut down at 2025-12-10 16:23:09 CST
+2025-12-10 16:23:09.405 CST [73830] LOG:  database system is ready to accept connections
+2025-12-10 16:23:15.815 CST [74078] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 16:23:15.815 CST [74078] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 16:23:15.815 CST [74078] STATEMENT:  select 1 && 2;
+2025-12-10 16:27:21.704 CST [73830] LOG:  received fast shutdown request
+2025-12-10 16:27:21.707 CST [73830] LOG:  aborting any active transactions
+2025-12-10 16:27:21.708 CST [73830] LOG:  background worker "logical replication launcher" (PID 73856) exited with exit code 1
+2025-12-10 16:27:21.709 CST [73851] LOG:  shutting down
+2025-12-10 16:27:21.713 CST [73851] LOG:  checkpoint starting: shutdown immediate
+2025-12-10 16:27:21.722 CST [73851] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.013 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2025-12-10 16:27:21.728 CST [73830] LOG:  database system is shut down
+2025-12-10 16:27:21.839 CST [102913] LOG:  starting PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+2025-12-10 16:27:21.841 CST [102913] LOG:  listening on IPv6 address "::1", port 5432
+2025-12-10 16:27:21.841 CST [102913] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-12-10 16:27:21.844 CST [102913] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-12-10 16:27:21.847 CST [102916] LOG:  database system was shut down at 2025-12-10 16:27:21 CST
+2025-12-10 16:27:21.854 CST [102913] LOG:  database system is ready to accept connections
+2025-12-10 16:27:28.219 CST [103195] ERROR:  operator does not exist: integer && integer at character 10
+2025-12-10 16:27:28.219 CST [103195] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2025-12-10 16:27:28.219 CST [103195] STATEMENT:  select 1 && 2;

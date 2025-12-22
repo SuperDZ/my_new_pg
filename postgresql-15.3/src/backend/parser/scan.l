@@ -1037,6 +1037,10 @@ other			.
 								return NOT_EQUALS;
 							if (yytext[0] == '!' && yytext[1] == '=')
 								return NOT_EQUALS;
+							if (mysql_mode && yytext[0] == '&' && yytext[1] == '&')
+								return LOGICAL_AND;
+							if (mysql_mode && yytext[0] == '|' && yytext[1] == '|')
+								return LOGICAL_OR;
 						}
 					}
 

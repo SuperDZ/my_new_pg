@@ -671,6 +671,8 @@ static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,Lis
  * this file for "Keyword category lists".
  */
 
+%token     LOGICAL_AND LOGICAL_OR
+
 /* ordinary key words in alphabetical order */
 %token <keyword> ABORT_P ABSOLUTE_P ACCESS ACTION ADD_P ADMIN AFTER
 	AGGREGATE ALL ALSO ALTER ALWAYS ANALYSE ANALYZE AND ANY ARRAY AS ASC
@@ -763,6 +765,7 @@ static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,Lis
 
 	XML_P XMLATTRIBUTES XMLCONCAT XMLELEMENT XMLEXISTS XMLFOREST XMLNAMESPACES
 	XMLPARSE XMLPI XMLROOT XMLSERIALIZE XMLTABLE
+	XOR
 
 	YEAR_P YES_P
 
@@ -798,8 +801,9 @@ static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,Lis
 %nonassoc	SET				/* see relation_expr_opt_alias */
 %left		UNION EXCEPT
 %left		INTERSECT
-%left		OR
-%left		AND
+%left		OR LOGICAL_OR
+%left		XOR				/* MySQL XOR operator */
+%left		AND LOGICAL_AND
 %right		NOT
 %nonassoc	IS ISNULL NOTNULL	/* IS sets precedence for IS NULL, etc */
 %nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS NOT_NOTEXC NOT_LAEXC
@@ -14701,6 +14705,36 @@ a_expr:		c_expr									{ $$ = $1; }
 				{ $$ = makeAndExpr($1, $3, @2); }
 			| a_expr OR a_expr
 				{ $$ = makeOrExpr($1, $3, @2); }
+
+			/* MySQL 兼容逻辑操作符：&& / || 需要做 bool 转换 */
+			| a_expr LOGICAL_AND a_expr
+            	{
+					Node *left_bool = (Node *) makeTypeCast($1, SystemTypeName("bool"), -1);
+					Node *right_bool = (Node *) makeTypeCast($3, SystemTypeName("bool"), -1);
+            		$$ = makeAndExpr(left_bool, right_bool, @2);
+            	}
+        	| a_expr LOGICAL_OR a_expr
+            	{
+					Node *left_bool = (Node *) makeTypeCast($1, SystemTypeName("bool"), -1);
+					Node *right_bool = (Node *) makeTypeCast($3, SystemTypeName("bool"), -1);
+            		$$ = makeOrExpr(left_bool, right_bool, @2);
+            	}
+			/* MySQL XOR：需要先转 bool，然后按异或展开 */
+			| a_expr XOR a_expr               %prec OR
+            	{
+					/*
+					* XOR 语义：a XOR b = (a AND NOT b) OR (NOT a AND b)
+					* 先将操作数转换为 bool，再应用异或逻辑。
+					*/
+					Node *left_bool  = (Node *) makeTypeCast($1, SystemTypeName("bool"), -1);
+					Node *right_bool = (Node *) makeTypeCast($3, SystemTypeName("bool"), -1);
+					Node *not_left   = makeNotExpr(left_bool, @1);
+					Node *not_right  = makeNotExpr(right_bool, @3);
+					Node *left_and   = makeAndExpr(left_bool, not_right, @2);
+					Node *right_and  = makeAndExpr(not_left, right_bool, @2);
+					$$ = makeOrExpr(left_and, right_and, @2);
+            	}
+				
 			| NOT a_expr
 				{ $$ = makeNotExpr($2, @1); }
 			| NOT_LA a_expr						%prec NOT

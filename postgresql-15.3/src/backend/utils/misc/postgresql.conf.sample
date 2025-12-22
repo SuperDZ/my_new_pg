@@ -811,3 +811,8 @@
 #------------------------------------------------------------------------------
 
 # Add settings for extensions here
+#mysql_mode = off
+
+# -  MYSQL COMPATIBILITY
+
+#enable_mysql_attpos = off

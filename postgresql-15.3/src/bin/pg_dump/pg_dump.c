@@ -319,6 +319,7 @@ static void setupDumpWorker(Archive *AHX);
 static TableInfo *getRootTableInfo(const TableInfo *tbinfo);
 static bool forcePartitionRootLoad(const TableInfo *tbinfo);
 
+static bool getEnableAttpos(PGconn *conn);
 
 int
 main(int argc, char **argv)
@@ -1097,6 +1098,8 @@ setup_connection(Archive *AH, const char *dumpencoding,
 
 	std_strings = PQparameterStatus(conn, "standard_conforming_strings");
 	AH->std_strings = (std_strings && strcmp(std_strings, "on") == 0);
+
+	AH->enable_mysql_attpos = getEnableAttpos(conn);
 
 	/*
 	 * Set the role if requested.  In a parallel dump worker, we'll be passed
@@ -8219,6 +8222,9 @@ getTableAttrs(Archive *fout, TableInfo *tblinfo, int numTables)
 	int			i_attmissingval;
 	int			i_atthasdef;
 
+	bool		enable_attpos_front = fout->enable_mysql_attpos;
+
+
 	/*
 	 * We want to perform just one query against pg_attribute, and then just
 	 * one against pg_attrdef (for DEFAULTs) and one against pg_constraint
@@ -8266,10 +8272,12 @@ getTableAttrs(Archive *fout, TableInfo *tblinfo, int numTables)
 	 * collation is different from their type's default, we use a CASE here to
 	 * suppress uninteresting attcollations cheaply.
 	 */
-	appendPQExpBufferStr(q,
+	// appendPQExpBufferStr(q,
+	appendPQExpBuffer(q,
 						 "SELECT\n"
 						 "a.attrelid,\n"
-						 "a.attnum,\n"
+						//  "a.attnum,\n"
+						 "a.%s,\n"
 						 "a.attname,\n"
 						 "a.atttypmod,\n"
 						 "a.attstattarget,\n"
@@ -8290,7 +8298,8 @@ getTableAttrs(Archive *fout, TableInfo *tblinfo, int numTables)
 						 "' ' || pg_catalog.quote_literal(option_value) "
 						 "FROM pg_catalog.pg_options_to_table(attfdwoptions) "
 						 "ORDER BY option_name"
-						 "), E',\n    ') AS attfdwoptions,\n");
+						 "), E',\n    ') AS attfdwoptions,\n",
+						 enable_attpos_front ? "attpos" : "attnum");
 
 	if (fout->remoteVersion >= 140000)
 		appendPQExpBufferStr(q,
@@ -8328,15 +8337,17 @@ getTableAttrs(Archive *fout, TableInfo *tblinfo, int numTables)
 					  "LEFT JOIN pg_catalog.pg_type t "
 					  "ON (a.atttypid = t.oid)\n"
 					  "WHERE a.attnum > 0::pg_catalog.int2\n"
-					  "ORDER BY a.attrelid, a.attnum",
-					  tbloids->data);
+					  "ORDER BY a.attrelid, a.%s",
+					  tbloids->data,
+					  enable_attpos_front ? "attpos" : "attnum");
 
 	res = ExecuteSqlQuery(fout, q->data, PGRES_TUPLES_OK);
 
 	ntups = PQntuples(res);
 
 	i_attrelid = PQfnumber(res, "attrelid");
-	i_attnum = PQfnumber(res, "attnum");
+	// i_attnum = PQfnumber(res, "attnum");
+	i_attnum = PQfnumber(res, enable_attpos_front ? "attpos" : "attnum");
 	i_attname = PQfnumber(res, "attname");
 	i_atttypname = PQfnumber(res, "atttypname");
 	i_atttypmod = PQfnumber(res, "atttypmod");
@@ -14977,6 +14988,8 @@ dumpTable(Archive *fout, const TableInfo *tbinfo)
 	DumpId		tableAclDumpId = InvalidDumpId;
 	char	   *namecopy;
 
+	bool		enable_attpos_front = fout->enable_mysql_attpos;
+
 	/* Do nothing in data-only dump */
 	if (dopt->dataOnly)
 		return;
@@ -15033,7 +15046,8 @@ dumpTable(Archive *fout, const TableInfo *tbinfo)
 				 * and is likely to stay that way, it's not worth extra cycles
 				 * and risk to avoid hard-wiring that knowledge here.
 				 */
-				appendPQExpBufferStr(query,
+				// appendPQExpBufferStr(query,
+				appendPQExpBuffer(query,
 									 "SELECT at.attname, "
 									 "at.attacl, "
 									 "'{}' AS acldefault, "
@@ -15046,7 +15060,8 @@ dumpTable(Archive *fout, const TableInfo *tbinfo)
 									 "WHERE at.attrelid = $1 AND "
 									 "NOT at.attisdropped "
 									 "AND (at.attacl IS NOT NULL OR pip.initprivs IS NOT NULL) "
-									 "ORDER BY at.attnum");
+									 "ORDER BY at.%s",
+									 enable_attpos_front ? "attpos" : "attnum");
 			}
 			else
 			{
@@ -18305,4 +18320,32 @@ appendReloptionsArrayAH(PQExpBuffer buffer, const char *reloptions,
 								fout->std_strings);
 	if (!res)
 		pg_log_warning("could not parse %s array", "reloptions");
+}
+
+/**
+ * @description: 是否开启了MySQL FIRST AFTER功能
+ * @param Archive*
+ * @author: lichunran
+ * @return bool
+ */
+static bool
+getEnableAttpos(PGconn *conn)
+{
+	PGresult   *res;
+
+	res = PQexec(conn, "show enable_mysql_attpos;");
+	if (PQntuples(res) == 1)
+	{
+		char	*res_str = PQgetvalue(res, 0, 0);
+
+		if (res_str && strcmp(res_str, "on") == 0)
+		{
+			PQclear(res);
+			return true;
+		}
+	}
+
+	PQclear(res);
+
+	return false;
 }

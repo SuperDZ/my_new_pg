@@ -76,6 +76,8 @@ extern TypeName *makeTypeNameFromOid(Oid typeOid, int32 typmod);
 extern ColumnDef *makeColumnDef(const char *colname,
 								Oid typeOid, int32 typmod, Oid collOid);
 
+extern ColumnPos *makeColumnPos(const char *based_col,bool is_first);					
+
 extern FuncExpr *makeFuncExpr(Oid funcid, Oid rettype, List *args,
 							  Oid funccollid, Oid inputcollid, CoercionForm fformat);
 
