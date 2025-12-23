@@ -429,6 +429,12 @@ static const struct config_enum_entry backslash_quote_options[] = {
 	{NULL, 0, false}
 };
 
+static const struct config_enum_entry sql_mode_options[] = {
+	{"DEFAULT_MODE", SQL_MODE_DEFAULT_MODE, false},
+	{"PIPES_AS_CONCAT", SQL_MODE_PIPES_AS_CONCAT, false},
+	{NULL, 0, false},
+};
+
 /*
  * Although only "on", "off", and "auto" are documented, we accept
  * all the likely variants of "on" and "off".
@@ -1014,6 +1020,7 @@ static const unit_conversion time_unit_conversion_table[] =
 /******** option records follow ********/
 
 bool mysql_mode = false;
+int sql_mode = SQL_MODE_DEFAULT_MODE;
 
 static struct config_bool ConfigureNamesBool[] =
 {
@@ -4745,21 +4752,32 @@ static struct config_string ConfigureNamesString[] =
 
 
 static struct config_enum ConfigureNamesEnum[] =
-{
 	{
+		{
 		{"backslash_quote", PGC_USERSET, COMPAT_OPTIONS_PREVIOUS,
-			gettext_noop("Sets whether \"\\'\" is allowed in string literals."),
-			NULL
+		gettext_noop("Sets whether \"\\'\" is allowed in string literals."),
+		NULL
 		},
 		&backslash_quote,
 		BACKSLASH_QUOTE_SAFE_ENCODING, backslash_quote_options,
 		NULL, NULL, NULL
+		},
+		
+		{
+		{"sql_mode", PGC_USERSET, QUERY_TUNING_METHOD,
+		gettext_noop("Sets SQL dialect compatibility mode."),
+		gettext_noop("Controls operator behavior in mysql_mode; "
+		"PIPES_AS_CONCAT treats || as string concatenation instead of logical OR.")
+		},
+		&sql_mode,
+		SQL_MODE_DEFAULT_MODE, sql_mode_options,
+		NULL, NULL, NULL
 	},
 
-	{
-		{"bytea_output", PGC_USERSET, CLIENT_CONN_STATEMENT,
-			gettext_noop("Sets the output format for bytea."),
-			NULL
+{
+{"bytea_output", PGC_USERSET, CLIENT_CONN_STATEMENT,
+gettext_noop("Sets the output format for bytea."),
+NULL
 		},
 		&bytea_output,
 		BYTEA_OUTPUT_HEX, bytea_output_options,
