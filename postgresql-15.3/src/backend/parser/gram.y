@@ -14682,7 +14682,18 @@ a_expr:		c_expr									{ $$ = $1; }
 			| a_expr '%' a_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "%", $1, $3, @2); }
 			| a_expr '^' a_expr
-				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "^", $1, $3, @2); }
+				{
+					if (mysql_mode)
+					{
+						Node *l = makeMysqlToInt8($1, @2);
+						Node *r = makeMysqlToInt8($3, @2);
+						Node *x = (Node *) makeSimpleA_Expr(AEXPR_OP, "#", l, r, @2);
+
+						$$ = makeMysqlU64(x, @2);
+					}
+					else
+						$$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "^", $1, $3, @2);
+				}
 			| a_expr '<' a_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "<", $1, $3, @2); }
 			| a_expr '>' a_expr
@@ -15155,7 +15166,18 @@ b_expr:		c_expr
 			| b_expr '%' b_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "%", $1, $3, @2); }
 			| b_expr '^' b_expr
-				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "^", $1, $3, @2); }
+				{
+					if (mysql_mode)
+					{
+						Node *l = makeMysqlToInt8($1, @2);
+						Node *r = makeMysqlToInt8($3, @2);
+						Node *x = (Node *) makeSimpleA_Expr(AEXPR_OP, "#", l, r, @2);
+
+						$$ = makeMysqlU64(x, @2);
+					}
+					else
+						$$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "^", $1, $3, @2);
+				}
 			| b_expr '<' b_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "<", $1, $3, @2); }
 			| b_expr '>' b_expr
@@ -18051,6 +18073,24 @@ makeNullAConst(int location)
 	n->location = location;
 
 	return (Node *) n;
+}
+
+static Node *
+makeMysqlToInt8(Node *arg, int location)
+{
+	return (Node *) makeFuncCall(SystemFuncName("mysql_to_int8"),
+								 list_make1(arg),
+								 COERCE_EXPLICIT_CALL,
+								 location);
+}
+
+static Node *
+makeMysqlU64(Node *arg, int location)
+{
+	return (Node *) makeFuncCall(SystemFuncName("mysql_u64"),
+								 list_make1(arg),
+								 COERCE_EXPLICIT_CALL,
+								 location);
 }
 
 static Node *

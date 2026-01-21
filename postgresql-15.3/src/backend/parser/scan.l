@@ -922,6 +922,28 @@ other			.
 				}
 
 {operator}		{
+					if (mysql_mode && yytext[0] == '#')
+					{
+						int			c;
+
+						/* Treat '#' as a single-line comment starter. */
+						while ((c = input()) != EOF)
+						{
+							if (c == '\n')
+								break;
+							if (c == '\r')
+							{
+								int			nextc = input();
+
+								if (nextc != '\n' && nextc != EOF)
+									unput(nextc);
+								break;
+							}
+						}
+						/* Ignore the comment and keep scanning. */
+					}
+					else
+					{
 					/*
 					 * Check for embedded slash-star or dash-dash; those
 					 * are comment starts, so operator must stop there.
@@ -1059,6 +1081,7 @@ other			.
 
 					yylval->str = pstrdup(yytext);
 					return Op;
+					}
 				}
 
 {param}			{

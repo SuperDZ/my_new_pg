@@ -11812,4 +11812,11 @@
   prorettype => 'bytea', proargtypes => 'pg_brin_minmax_multi_summary',
   prosrc => 'brin_minmax_multi_summary_send' },
 
+{ oid => '10000', descr => 'convert value to int8 using mysql semantics',
+  proname => 'mysql_to_int8', prorettype => 'int8', proargtypes => 'anyelement',
+  proisstrict => 't', prosrc => 'mysql_to_int8' },
+{ oid => '10001', descr => 'convert int8 to unsigned 64-bit numeric',
+  proname => 'mysql_u64', prorettype => 'numeric', proargtypes => 'int8',
+  proisstrict => 't', prosrc => 'mysql_u64' },
+
 ]
