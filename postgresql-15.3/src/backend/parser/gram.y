@@ -180,6 +180,8 @@ static Node *makeFloatConst(char *str, int location);
 static Node *makeBoolAConst(bool state, int location);
 static Node *makeBitStringConst(char *str, int location);
 static Node *makeNullAConst(int location);
+static Node *makeMysqlToInt8(Node *arg, int location);
+static Node *makeMysqlU64(Node *arg, int location);
 static Node *makeAConst(Node *v, int location);
 static RoleSpec *makeRoleSpec(RoleSpecType type, int location);
 static void check_qualified_name(List *names, core_yyscan_t yyscanner);
