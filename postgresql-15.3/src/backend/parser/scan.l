@@ -922,18 +922,14 @@ other			.
 					return yytext[0];
 				}
 
-"#"				{
-					if (mysql_mode)
+{operator}		{
+					if (mysql_mode && yytext[0] == '#')
+					{
+						yyless(0);
 						BEGIN(xhcomment);
+					}
 					else
 					{
-						SET_YYLLOC();
-						yylval->str = pstrdup(yytext);
-						return Op;
-					}
-				}
-
-{operator}		{
 					/*
 					 * Check for embedded slash-star or dash-dash; those
 					 * are comment starts, so operator must stop there.
@@ -1071,6 +1067,7 @@ other			.
 
 					yylval->str = pstrdup(yytext);
 					return Op;
+					}
 				}
 
 <xhcomment>{
