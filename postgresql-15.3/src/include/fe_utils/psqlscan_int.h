@@ -101,6 +101,7 @@ typedef struct PsqlScanStateData
 	int			encoding;		/* encoding being used now */
 	bool		safe_encoding;	/* is current encoding "safe"? */
 	bool		std_strings;	/* are string literals standard? */
+	bool		mysql_mode;		/* treat # as mysql-style comment? */
 	const char *curline;		/* actual flex input string for cur buf */
 	const char *refline;		/* original data for cur buffer */
 

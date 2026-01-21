@@ -136,6 +136,7 @@ extern void psql_yyset_column(int column_no, yyscan_t yyscanner);
 %x xdolq
 %x xui
 %x xus
+%x xhcomment
 
 /*
  * In order to make the world safe for Windows and Mac clients as well as
@@ -426,6 +427,19 @@ other			.
 					ECHO;
 				}
 } /* <xc> */
+
+<xhcomment>{
+{non_newline}+	{
+					if (output_buf->len > 0)
+						ECHO;
+				}
+
+{newline}		{
+					BEGIN(INITIAL);
+					if (output_buf->len > 0)
+						ECHO;
+				}
+} /* <xhcomment> */
 
 {xbstart}		{
 					BEGIN(xb);
@@ -774,6 +788,14 @@ other			.
 				}
 
 {operator}		{
+					if (cur_state->mysql_mode && yytext[0] == '#')
+					{
+						BEGIN(xhcomment);
+						if (output_buf->len > 0)
+							ECHO;
+					}
+					else
+					{
 					/*
 					 * Check for embedded slash-star or dash-dash; those
 					 * are comment starts, so operator must stop there.
@@ -838,6 +860,7 @@ other			.
 						yyless(nchars);
 					}
 					ECHO;
+					}
 				}
 
 {param}			{
@@ -1002,6 +1025,15 @@ void
 psql_scan_set_passthrough(PsqlScanState state, void *passthrough)
 {
 	state->cb_passthrough = passthrough;
+}
+
+/*
+ * Set mysql_mode for comment handling.
+ */
+void
+psql_scan_set_mysql_mode(PsqlScanState state, bool mysql_mode)
+{
+	state->mysql_mode = mysql_mode;
 }
 
 /*

@@ -214,6 +214,8 @@ mysql_u64(PG_FUNCTION_ARGS)
 
 	PG_RETURN_DATUM(DirectFunctionCall2(numeric_add,
 										num,
-										DirectFunctionCall1(numeric_in,
-															CStringGetDatum("18446744073709551616"))));
+										DirectFunctionCall3(numeric_in,
+															CStringGetDatum("18446744073709551616"),
+															ObjectIdGetDatum(InvalidOid),
+															Int32GetDatum(-1))));
 }

@@ -18,7 +18,8 @@ bool		autocommit = false,
 			force_indicator = true,
 			questionmarks = false,
 			regression_mode = false,
-			auto_prepare = false;
+			auto_prepare = false,
+			mysql_mode = false;
 
 char	   *output_filename;
 

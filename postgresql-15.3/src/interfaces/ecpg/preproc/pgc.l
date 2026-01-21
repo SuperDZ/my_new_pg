@@ -164,6 +164,7 @@ static struct _if_value
 %x xus
 %x xcond
 %x xskip
+%x xhcomment
 
 /* Additional exclusive states that are specific to ECPG */
 %x C SQL incl def def_ident undef
@@ -508,6 +509,62 @@ cppline			{space}*#([^i][A-Za-z]*|{if}|{ifdef}|{ifndef}|{import})((\/\*[^*/]*\*+
 				}
 } /* <xc> */
 
+<xhcomment>{
+{non_newline}+	{
+					/* ignore */
+				}
+
+{newline}		{
+					BEGIN(SQL);
+				}
+
+<<EOF>>			{
+					if (yy_buffer == NULL)
+					{
+						if (preproc_tos > 0)
+						{
+							preproc_tos = 0;
+							mmfatal(PARSE_ERROR, "missing \"EXEC SQL ENDIF;\"");
+						}
+						yyterminate();
+					}
+					else
+					{
+						struct _yy_buffer *yb = yy_buffer;
+						int i;
+						struct _defines *ptr;
+
+						for (ptr = defines; ptr; ptr = ptr->next)
+							if (ptr->used == yy_buffer)
+							{
+								ptr->used = NULL;
+								break;
+							}
+
+						if (yyin != NULL)
+							fclose(yyin);
+
+						yy_delete_buffer(YY_CURRENT_BUFFER);
+						yy_switch_to_buffer(yy_buffer->buffer);
+
+						yylineno = yy_buffer->lineno;
+
+						/* We have to output the filename only if we change files here */
+						i = strcmp(input_filename, yy_buffer->filename);
+
+						free(input_filename);
+						input_filename = yy_buffer->filename;
+
+						yy_buffer = yy_buffer->next;
+						free(yb);
+
+						if (i != 0)
+							output_line_number();
+
+					}
+				}
+} /* <xhcomment> */
+
 <SQL>{
 {xbstart}		{
 					token_start = yytext;
@@ -821,6 +878,12 @@ cppline			{space}*#([^i][A-Za-z]*|{if}|{ifdef}|{ifndef}|{import})((\/\*[^*/]*\*+
 				}
 
 {operator}		{
+					if (mysql_mode && yytext[0] == '#')
+					{
+						BEGIN(xhcomment);
+					}
+					else
+					{
 					/*
 					 * Check for embedded slash-star or dash-dash; those
 					 * are comment starts, so operator must stop there.
@@ -915,6 +978,7 @@ cppline			{space}*#([^i][A-Za-z]*|{if}|{ifdef}|{ifndef}|{import})((\/\*[^*/]*\*+
 
 					base_yylval.str = mm_strdup(yytext);
 					return Op;
+					}
 				}
 
 {param}			{
