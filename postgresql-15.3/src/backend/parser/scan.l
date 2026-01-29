@@ -1054,6 +1054,9 @@ other			.
                                                                         return LOGICAL_OR;
                                                        }
                                                 }
+						if (mysql_mode && nchars == 3 &&
+							yytext[0] == '<' && yytext[1] == '=' && yytext[2] == '>')
+							return NULL_SAFE_EQUAL;
                                         }
 
 					/*
