@@ -1,0 +1,21 @@
+SET
+ ?column? 
+----------
+        8
+(1 row)
+
+SET
+ ?column? | ?column? 
+----------+----------
+        0 |        8
+(1 row)
+
+ ?column? 
+----------
+        1
+(1 row)
+
+ ?column? 
+----------
+ t
+(1 row)

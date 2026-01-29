@@ -71,6 +71,7 @@ extern PsqlScanState psql_scan_create(const PsqlScanCallbacks *callbacks);
 extern void psql_scan_destroy(PsqlScanState state);
 
 extern void psql_scan_set_passthrough(PsqlScanState state, void *passthrough);
+extern void psql_scan_set_mysql_mode(PsqlScanState state, bool mysql_mode);
 
 extern void psql_scan_setup(PsqlScanState state,
 							const char *line, int line_len,

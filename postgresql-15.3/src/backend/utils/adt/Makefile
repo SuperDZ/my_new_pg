@@ -64,6 +64,7 @@ OBJS = \
 	mac8.o \
 	mcxtfuncs.o \
 	misc.o \
+	mysql_compat.o \
 	multirangetypes.o \
 	multirangetypes_selfuncs.o \
 	name.o \

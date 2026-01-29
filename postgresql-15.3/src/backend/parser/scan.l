@@ -201,6 +201,7 @@ extern void core_yyset_column(int column_no, yyscan_t yyscanner);
 %x xui
 %x xus
 %x xeu
+%x xhcomment
 
 /*
  * In order to make the world safe for Windows and Mac clients as well as
@@ -922,6 +923,13 @@ other			.
 				}
 
 {operator}		{
+					if (mysql_mode && yytext[0] == '#')
+					{
+						yyless(0);
+						BEGIN(xhcomment);
+					}
+					else
+					{
 					/*
 					 * Check for embedded slash-star or dash-dash; those
 					 * are comment starts, so operator must stop there.
@@ -1059,7 +1067,22 @@ other			.
 
 					yylval->str = pstrdup(yytext);
 					return Op;
+					}
 				}
+
+<xhcomment>{
+{non_newline}+	{
+					/* ignore */
+				}
+
+{newline}		{
+					BEGIN(INITIAL);
+				}
+
+<<EOF>>			{
+					BEGIN(INITIAL);
+				}
+}
 
 {param}			{
 					SET_YYLLOC();
