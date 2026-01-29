@@ -665,6 +665,7 @@ static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,Lis
 %token <ival>	ICONST PARAM
 %token			TYPECAST DOT_DOT COLON_EQUALS EQUALS_GREATER
 %token			LESS_EQUALS GREATER_EQUALS NOT_EQUALS
+%token			NULL_SAFE_EQUAL
 
 /*
  * If you want to make any keyword changes, update the keyword table in
@@ -14702,6 +14703,8 @@ a_expr:		c_expr									{ $$ = $1; }
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, ">", $1, $3, @2); }
 			| a_expr '=' a_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "=", $1, $3, @2); }
+			| a_expr NULL_SAFE_EQUAL a_expr
+				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_NOT_DISTINCT, "=", $1, $3, @2); }
 			| a_expr LESS_EQUALS a_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "<=", $1, $3, @2); }
 			| a_expr GREATER_EQUALS a_expr
@@ -15186,6 +15189,8 @@ b_expr:		c_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, ">", $1, $3, @2); }
 			| b_expr '=' b_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "=", $1, $3, @2); }
+			| b_expr NULL_SAFE_EQUAL b_expr
+				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_NOT_DISTINCT, "=", $1, $3, @2); }
 			| b_expr LESS_EQUALS b_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "<=", $1, $3, @2); }
 			| b_expr GREATER_EQUALS b_expr
