@@ -809,7 +809,7 @@ static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,Lis
 %left		AND LOGICAL_AND
 %right		NOT
 %nonassoc	IS ISNULL NOTNULL	/* IS sets precedence for IS NULL, etc */
-%nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS NOT_NOTEXC NOT_LAEXC
+%nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS NULL_SAFE_EQUAL NOT_NOTEXC NOT_LAEXC
 %nonassoc	BETWEEN IN_P LIKE ILIKE SIMILAR NOT_LA
 %nonassoc	ESCAPE			/* ESCAPE must be just above LIKE/ILIKE/SIMILAR */
 /*
