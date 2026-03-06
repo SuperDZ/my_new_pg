@@ -1146,6 +1146,7 @@ _outVar(StringInfo str, const Var *node)
 	WRITE_UINT_FIELD(varlevelsup);
 	WRITE_UINT_FIELD(varnosyn);
 	WRITE_INT_FIELD(varattnosyn);
+	WRITE_INT_FIELD(varattpos);
 	WRITE_LOCATION_FIELD(location);
 }
 
