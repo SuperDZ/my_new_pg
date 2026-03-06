@@ -13055,8 +13055,7 @@ ATExecAlterColumnType(AlteredTableInfo *tab, Relation rel,
 				ereport(ERROR,
 						(errcode(ERRCODE_INVALID_COLUMN_REFERENCE),
 						 errmsg("column \"%s\" cannot be positioned relative to itself",
-									colPos->based_colname,
-									RelationGetRelationName(rel))));
+									colPos->based_colname)));
 
 			for (i = 0; i < tupleDesc->natts; i++)
 			{
