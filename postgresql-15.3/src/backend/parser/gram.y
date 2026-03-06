@@ -809,7 +809,7 @@ static List * makeCommentNodeForCreateTable(char *tablename,char *relComment,Lis
 %left		AND LOGICAL_AND
 %right		NOT
 %nonassoc	IS ISNULL NOTNULL	/* IS sets precedence for IS NULL, etc */
-%nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS NOT_NOTEXC NOT_LAEXC
+%nonassoc	'<' '>' '=' LESS_EQUALS GREATER_EQUALS NOT_EQUALS NULL_SAFE_EQUAL NOT_NOTEXC NOT_LAEXC
 %nonassoc	BETWEEN IN_P LIKE ILIKE SIMILAR NOT_LA
 %nonassoc	ESCAPE			/* ESCAPE must be just above LIKE/ILIKE/SIMILAR */
 /*
@@ -14703,7 +14703,7 @@ a_expr:		c_expr									{ $$ = $1; }
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, ">", $1, $3, @2); }
 			| a_expr '=' a_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "=", $1, $3, @2); }
-			| a_expr NULL_SAFE_EQUAL a_expr
+			| a_expr NULL_SAFE_EQUAL a_expr			%prec '='
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_NOT_DISTINCT, "=", $1, $3, @2); }
 			| a_expr LESS_EQUALS a_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "<=", $1, $3, @2); }
@@ -15189,7 +15189,7 @@ b_expr:		c_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, ">", $1, $3, @2); }
 			| b_expr '=' b_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "=", $1, $3, @2); }
-			| b_expr NULL_SAFE_EQUAL b_expr
+			| b_expr NULL_SAFE_EQUAL b_expr			%prec '='
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_NOT_DISTINCT, "=", $1, $3, @2); }
 			| b_expr LESS_EQUALS b_expr
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "<=", $1, $3, @2); }
