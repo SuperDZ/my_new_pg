@@ -622,6 +622,7 @@ _readVar(void)
 	READ_UINT_FIELD(varlevelsup);
 	READ_UINT_FIELD(varnosyn);
 	READ_INT_FIELD(varattnosyn);
+	READ_INT_FIELD(varattpos);
 	READ_LOCATION_FIELD(location);
 
 	READ_DONE();

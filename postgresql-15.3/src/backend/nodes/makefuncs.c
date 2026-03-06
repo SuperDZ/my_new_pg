@@ -88,6 +88,7 @@ makeVar(int varno,
 	 */
 	var->varnosyn = (Index) varno;
 	var->varattnosyn = varattno;
+	var->varattpos = varattno;
 
 	/* Likewise, we just set location to "unknown" here */
 	var->location = -1;

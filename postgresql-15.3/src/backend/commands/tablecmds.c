@@ -13053,10 +13053,9 @@ ATExecAlterColumnType(AlteredTableInfo *tab, Relation rel,
 		{
 			if (namestrcmp(&(attTup->attname), colPos->based_colname) == 0)
 				ereport(ERROR,
-						(errcode(ERRCODE_UNDEFINED_COLUMN),
-						 errmsg("column \"%s\" in \"%s\" does not exist",
-								colPos->based_colname,
-								RelationGetRelationName(rel))));
+						(errcode(ERRCODE_INVALID_COLUMN_REFERENCE),
+						 errmsg("column \"%s\" cannot be positioned relative to itself",
+									colPos->based_colname)));
 
 			for (i = 0; i < tupleDesc->natts; i++)
 			{
