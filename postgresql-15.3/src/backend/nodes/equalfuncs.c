@@ -175,6 +175,7 @@ _equalVar(const Var *a, const Var *b)
 	COMPARE_SCALAR_FIELD(vartypmod);
 	COMPARE_SCALAR_FIELD(varcollid);
 	COMPARE_SCALAR_FIELD(varlevelsup);
+	COMPARE_SCALAR_FIELD(varattpos);
 
 	/*
 	 * varnosyn/varattnosyn are intentionally ignored here, because Vars with
